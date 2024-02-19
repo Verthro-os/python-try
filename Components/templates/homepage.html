@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CARVIS - Find Your Dream Car</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/homepage.css') }}">
+</head>
+<body>
+    <header class="site-header">
+        <div class="wrapper">
+            <div class="header-content">
+                <a href="/" class="brand-logo">CARVIS</a>
+                <nav class="site-nav">
+                    <ul>
+                        <li><a href="/account">Account</a></li>
+                        <li><a href="/about">About</a></li>
+                    </ul>
+                </nav>
+            </div>
+        </div>
+    </header>
+    <main>
+        <section class="hero">
+            <div class="wrapper">
+                <h1>Find Your Dream Car with CARVIS</h1>
+            </div>
+        </section>
+        <section class="gallery">
+            <div class="wrapper">
+                <h2>Browse Gallery</h2>
+                <div class="car-listings">
+                    {% for car, is_new in car_ads %}
+                    <div class="car {{ 'new-car' if is_new else 'used-car' }}">
+                        <img src="{{ car.image_url }}" alt="Image of {{ car.make }} {{ car.model }}">
+                        <h3>{{ car.make }} {{ car.model }} - {{ car.year }}</h3>
+                        <p>Mileage: {{ car.mileage }} miles</p>
+                        <p>Price: ${{ car.price }}</p>
+                        <p>{{ 'New' if is_new else 'Used' }}</p>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </section>
+    </main>
+</body>
+</html> 
