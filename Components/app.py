@@ -115,5 +115,9 @@ def create_account():
     print ("User added")
     return redirect(url_for('show_create_account_form'))
 
+@app.route('/login', methods=['GET','POST'])
+def login_account():
+    pass
+
 if __name__ == '__main__':
     app.run(debug=True)
