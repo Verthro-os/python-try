@@ -127,5 +127,9 @@ def homepage():
 
     return render_template('homepage.html', car_ads=car_ads)
 
+@app.route('/login', methods=['GET','POST'])
+def login_account():
+    pass
+
 if __name__ == '__main__':
     app.run(debug=True)
