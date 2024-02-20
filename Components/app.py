@@ -2,6 +2,7 @@ from flask import Flask, render_template, request, redirect, url_for, session
 from flask_sqlalchemy import SQLAlchemy
 from enum import Enum as PyEnum
 from werkzeug.security import generate_password_hash, check_password_hash
+from datetime import datetime
 
 
 app = Flask(__name__)
@@ -165,15 +166,36 @@ def show_dashboard_form():
     return render_template('user_login.html')
 
 
-@app.route('/homepage', methods=['GET','POST'])
+@app.route('/homepage', methods=['GET', 'POST'])
 def homepage():
-    # Joining CarModel and Advertisement tables to fetch all necessary details
-    car_ads = db.session.query(
-        CarModel,
-        Advertisement.is_new
-    ).join(Advertisement, CarModel.model_id == Advertisement.model_id).all()
+    # Fetching all advertisements and joining with CarModel to get car details
+    ads_with_cars = db.session.query(
+        Advertisement,
+        CarModel.make,
+        CarModel.model,
+        CarModel.year,
+        CarModel.mileage,
+        CarModel.price,
+        CarModel.image_url
+    ).join(CarModel, Advertisement.model_id == CarModel.model_id).all()
 
-    return render_template('homepage.html', car_ads=car_ads)
+    return render_template('homepage.html', ads_with_cars=ads_with_cars)
+
+@app.route('/ad/<int:ad_id>')
+def ad_detail(ad_id):
+    # Fetch the specific advertisement by ad_id
+    advertisement = Advertisement.query.get_or_404(ad_id)
+    # Fetch the associated car model details
+    car_model = CarModel.query.get(advertisement.model_id)
+    
+    # Render a template for the ad detail page, passing the advertisement and car model
+    return render_template('ad_detail.html', advertisement=advertisement, car_model=car_model)
+
+#@app.route('/car-images')
+    #def car_images():
+    # Fetch all car model image URLs as a list of strings
+    #  car_images = [url for (url,) in CarModel.query.with_entities(CarModel.image_url).all()]
+   # return render_template('car_images.html', car_images=car_images)
 
 
 if __name__ == '__main__':

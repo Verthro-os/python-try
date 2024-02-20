@@ -10,7 +10,7 @@
     <header class="site-header">
         <div class="wrapper">
             <div class="header-content">
-                <a href="/" class="brand-logo">CARVIS</a>
+                <a href="/homepage" class="brand-logo">CARVIS</a>
                 <nav class="site-nav">
                     <ul>
                         <li><a href="/account">Account</a></li>
@@ -28,16 +28,21 @@
         </section>
         <section class="gallery">
             <div class="wrapper">
+                
                 <h2>Browse Gallery</h2>
                 <div class="car-listings">
-                    {% for car, is_new in car_ads %}
-                    <div class="car {{ 'new-car' if is_new else 'used-car' }}">
-                        <img src="{{ car.image_url }}" alt="Image of {{ car.make }} {{ car.model }}">
-                        <h3>{{ car.make }} {{ car.model }} - {{ car.year }}</h3>
-                        <p>Mileage: {{ car.mileage }} miles</p>
-                        <p>Price: ${{ car.price }}</p>
-                        <p>{{ 'New' if is_new else 'Used' }}</p>
-                    </div>
+                    {% for ad, make, model, year, mileage, price, image_url in ads_with_cars %}                       
+                        <a href="{{ url_for('ad_detail', ad_id=ad.ad_id) }}" class="car-listing card">
+                            <div class="card-image">
+                                <img src="{{ url_for('static', filename=image_url) }}" alt="{{ make }} {{ model }}">
+                            </div>
+                            <div class="card-content {{ 'new' if ad.is_new else 'used' }}">
+                                <h3>{{ make }} {{ model }} - {{ year }}</h3>
+                                <p>Mileage: {{ mileage }} miles</p>
+                                <p>Price: ${{ price }}</p>
+                                <p class="condition {{ 'new' if ad.is_new else 'used' }}">Condition: {{ 'New' if ad.is_new else 'Used' }}</p>
+                            </div>
+                        </a>
                     {% endfor %}
                 </div>
             </div>

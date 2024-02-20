@@ -68,8 +68,6 @@ body {
     font-size: 30px; 
     text-shadow: 2px 2px 4px rgba(0,0,0,0.5); 
 }
-
-
 /* Gallery section styling */
 .gallery {
     padding: 40px 0;
@@ -78,69 +76,83 @@ body {
 .gallery h2 {
     text-align: center;
     margin-bottom: 40px;
+    font-size: 2rem; /* Larger heading */
+    text-decoration: underline;
 }
 
 .car-listings {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-    grid-gap: 20px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    justify-content: center;
 }
 
-.car {
-    background: #fff;
+.car-listing {
+    flex: 0 1 calc(33.333% - 20px); /* Three items per row with spacing */
+    display: flex;
+    flex-direction: column;
+    align-items: center; /* Center-align items */
     border-radius: 10px;
-    padding: 20px;
-    box-shadow: 0 2px 5px rgba(0,0,0,.1);
+    overflow: hidden;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    transition: box-shadow 0.3s ease, transform 0.3s ease;
+    text-align: center; /* Center text alignment */
+    font-size: 1.1rem; /* Larger text */
+    text-decoration: none;
 }
 
-.car img {
-    width: 100%;
-    border-radius: 10px;
+/* Apply the hover effect to the entire listing */
+.car-listing:hover {
+    box-shadow: 0 8px 16px rgba(0,0,0,0.2);
+    transform: translateY(-15px);
 }
 
-.car h3 {
-    margin-top: 10px;
-    font-size: 18px;
-}
-
-.car p {
-    font-size: 16px;
-    color: #666;
-}
-
-/* New and Used tag styling */
-
-.new-car, .used-car {
+/* Image container */
+.card-image {
+    width: 100%; /* Set a fixed width or max-width here if necessary */
     display: block;
-    text-align: center;
-    margin: 10px 0;
-    padding: 5px;
-    border-radius: 5px;
-    font-weight: bold;
-    color: #fff;
+    height: 200px; /* Fixed height for images */
+    overflow: hidden; /* Hide overflow to maintain the aspect ratio */
 }
 
-.new-car {
-    background-color: #4CAF50; /* Green for new cars */
+/* Ensure the images fit nicely */
+.card-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover; /* Cover the area without stretching */
 }
 
-.used-car {
-    background-color: #2196F3; /* Blue for used cars */
+/* Content container */
+.card-content {
+    padding: 1rem;
+    width: 100%; /* Match the width of the image */
+    transition: background-color 0.3s ease; /* Smooth transition for background color */
 }
 
-/* Responsive design for smaller screens */
-@media screen and (max-width: 768px) {
-    .header-content, .site-nav ul {
-        flex-direction: column;
-    }
-    .site-nav ul {
-        margin-top: 20px;
-    }
-    .site-nav ul li {
-        margin-bottom: 10px;
-    }
-    .hero {
-        padding: 40px 0;
-    }
+/* Condition-based background color */
+.card-content.new {
+    background-color: #87b389; /* Green for new cars */
+}
+
+.card-content.used {
+    background-color: #778ea1; /* Blue for used cars */
+}
+
+/* Text styling */
+.card-content h3 {
+    margin-top: 0.5rem;
+    margin-bottom: 0.5rem;
+    font-size: 1.5rem; /* Larger title */
+}
+
+.card-content p {
+    color: #1b1b1b;
+    margin: 0.5rem 0;
+    text-decoration: solid;
+}
+
+/* Ensure image containers are the same height */
+.card-image {
+    height: 200px; /* Adjust as needed */
 }
 

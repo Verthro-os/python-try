@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Car Images</title>
+    <style>
+        /* Basic styling */
+        body { font-family: Arial, sans-serif; margin: 20px; }
+        .car-image { margin-bottom: 20px; }
+        img { width: 100%; max-width: 300px; height: auto; border-radius: 5px; }
+    </style>
+</head>
+<body>
+    <h1>Car Images</h1>
+    <div class="car-images">
+        {% for image_url in car_images %}
+        <div class="car-image">
+            <img src="{{ url_for('static', filename=image_url) }}" alt="Car Image">
+        </div>
+        {% endfor %}
+    </div>
+</body>
+</html>
