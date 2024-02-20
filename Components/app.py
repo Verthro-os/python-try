@@ -165,8 +165,6 @@ def show_dashboard_form():
     return render_template('user_login.html')
 
 
-
-
 @app.route('/homepage', methods=['GET','POST'])
 def homepage():
     # Joining CarModel and Advertisement tables to fetch all necessary details
@@ -176,10 +174,6 @@ def homepage():
     ).join(Advertisement, CarModel.model_id == Advertisement.model_id).all()
 
     return render_template('homepage.html', car_ads=car_ads)
-
-@app.route('/login', methods=['GET','POST'])
-def login_account():
-    pass
 
 
 if __name__ == '__main__':
