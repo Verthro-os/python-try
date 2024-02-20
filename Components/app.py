@@ -183,12 +183,8 @@ def homepage():
 
 @app.route('/ad/<int:ad_id>')
 def ad_detail(ad_id):
-    # Fetch the specific advertisement by ad_id
     advertisement = Advertisement.query.get_or_404(ad_id)
-    # Fetch the associated car model details
     car_model = CarModel.query.get(advertisement.model_id)
-    
-    # Render a template for the ad detail page, passing the advertisement and car model
     return render_template('ad_detail.html', advertisement=advertisement, car_model=car_model)
 
 #@app.route('/car-images')
