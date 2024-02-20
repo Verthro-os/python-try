@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, redirect, url_for
+from flask import Flask, render_template, request, redirect, url_for, session
 from flask_sqlalchemy import SQLAlchemy
 from enum import Enum as PyEnum
 from werkzeug.security import generate_password_hash, check_password_hash
@@ -7,6 +7,7 @@ from werkzeug.security import generate_password_hash, check_password_hash
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///carvis.db'
 db = SQLAlchemy(app)
+app.secret_key = 'eb3d197e1633fd5193f89ff8b2887923d12645b647a97893'
 
 
 class UserLevels(PyEnum):
@@ -144,14 +145,26 @@ def login():
 
     existing_user = User.query.filter_by(username=username).first()
     if existing_user and check_password_hash(existing_user.password, password):
+        session['username'] = username
         return redirect(url_for('show_dashboard_form'))
 
     return render_template('user_login.html', error="Username and Password dont match")
 
 
+@app.route('/logout')
+def logout():
+    # Clear session
+    session.pop('username', None)
+    return redirect(url_for('show_login_account_form'))
+
 @app.route('/dashboard')
 def show_dashboard_form():
-    return render_template('dashboard.html')
+    if 'username' in session:
+        return render_template('dashboard.html')
+    return render_template('user_login.html')
+
+
+
 
 @app.route('/homepage', methods=['GET','POST'])
 def homepage():
