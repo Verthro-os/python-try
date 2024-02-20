@@ -1,0 +1,146 @@
+/* Reset some basic elements */
+body, h1, h2, ul {
+    margin: 0;
+    padding: 0;
+}
+
+/* Basic body styling */
+body {
+    font-family: 'Arial', sans-serif;
+    background-color: #f4f4f4;
+    color: #333;
+    line-height: 1.6;
+}
+
+/* Wrapper styling */
+.wrapper {
+    width: 90%;
+    max-width: 1200px;
+    margin: auto;
+    overflow: hidden;
+}
+
+/* Header styling */
+.site-header {
+    background: #333;
+    color: #fff;
+    padding: 20px 0;
+    
+}
+
+.header-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.brand-logo {
+    font-size: 30px;
+    font-weight: bold;
+    text-decoration: none;
+    color: #fff;
+}
+
+.site-nav ul {
+    list-style: none;
+    display: flex;
+}
+
+.site-nav ul li {
+    margin-left: 20px;
+}
+
+.site-nav ul li a {
+    color: #fafafa;
+    text-decoration: none;
+    font-weight: bold;
+    font-size: 20px;
+}
+
+/* Hero section styling */
+.hero {
+    background-image: url('/static/img/banner.jpg');
+    background-size: cover;
+    background-position: center;
+    color: #fff;
+    padding: 200px 0;
+    text-align: center;
+    font-size: 30px; 
+    text-shadow: 2px 2px 4px rgba(0,0,0,0.5); 
+}
+
+
+/* Gallery section styling */
+.gallery {
+    padding: 40px 0;
+}
+
+.gallery h2 {
+    text-align: center;
+    margin-bottom: 40px;
+}
+
+.car-listings {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    grid-gap: 20px;
+}
+
+.car {
+    background: #fff;
+    border-radius: 10px;
+    padding: 20px;
+    box-shadow: 0 2px 5px rgba(0,0,0,.1);
+}
+
+.car img {
+    width: 100%;
+    border-radius: 10px;
+}
+
+.car h3 {
+    margin-top: 10px;
+    font-size: 18px;
+}
+
+.car p {
+    font-size: 16px;
+    color: #666;
+}
+
+/* New and Used tag styling */
+
+.new-car, .used-car {
+    display: block;
+    text-align: center;
+    margin: 10px 0;
+    padding: 5px;
+    border-radius: 5px;
+    font-weight: bold;
+    color: #fff;
+}
+
+.new-car {
+    background-color: #4CAF50; /* Green for new cars */
+}
+
+.used-car {
+    background-color: #2196F3; /* Blue for used cars */
+}
+
+/* Responsive design for smaller screens */
+@media screen and (max-width: 768px) {
+    .header-content, .site-nav ul {
+        flex-direction: column;
+    }
+    .site-nav ul {
+        margin-top: 20px;
+    }
+    .site-nav ul li {
+        margin-bottom: 10px;
+    }
+    .hero {
+        padding: 40px 0;
+    }
+}
+

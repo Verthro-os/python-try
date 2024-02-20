@@ -3,6 +3,7 @@ from flask_sqlalchemy import SQLAlchemy
 from enum import Enum as PyEnum
 from werkzeug.security import generate_password_hash, check_password_hash
 
+
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///carvis.db'
 db = SQLAlchemy(app)
@@ -128,6 +129,7 @@ def create_account():
     return redirect(url_for('show_create_account_form'))
 
 
+
 @app.route('/login')
 def show_login_account_form():
     return render_template('user_login.html')
@@ -150,6 +152,21 @@ def login():
 @app.route('/dashboard')
 def show_dashboard_form():
     return render_template('dashboard.html')
+
+@app.route('/homepage', methods=['GET','POST'])
+def homepage():
+    # Joining CarModel and Advertisement tables to fetch all necessary details
+    car_ads = db.session.query(
+        CarModel,
+        Advertisement.is_new
+    ).join(Advertisement, CarModel.model_id == Advertisement.model_id).all()
+
+    return render_template('homepage.html', car_ads=car_ads)
+
+@app.route('/login', methods=['GET','POST'])
+def login_account():
+    pass
+
 
 if __name__ == '__main__':
     app.run(debug=True)
