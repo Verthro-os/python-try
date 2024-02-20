@@ -1,16 +1,18 @@
 from flask import Flask, render_template, request, redirect, url_for
 from flask_sqlalchemy import SQLAlchemy
 from enum import Enum as PyEnum
-from werkzeug.security import generate_password_hash
+from werkzeug.security import generate_password_hash, check_password_hash
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///carvis.db'
 db = SQLAlchemy(app)
 
+
 class UserLevels(PyEnum):
-    BUYER_SELLER='Buyer/Seller'
+    BUYER_SELLER = 'Buyer/Seller'
     SALESPERSON = 'Salesperson'
     SUPERADMIN = 'Superadmin'
+
 
 class User(db.Model):
     user_id = db.Column(db.Integer, primary_key=True)
@@ -19,12 +21,14 @@ class User(db.Model):
     user_level = db.Column(db.Enum(UserLevels), nullable=False)
     personal_info = db.relationship('PersonalInformation', backref='user', uselist=False)
 
+
 class PersonalInformation(db.Model):
     user_id = db.Column(db.Integer, db.ForeignKey('user.user_id'), primary_key=True)
     full_name = db.Column(db.String(100))
     email = db.Column(db.String(100))
     phone_number = db.Column(db.String(20))
     address = db.Column(db.Text)
+
 
 class CarModel(db.Model):
     model_id = db.Column(db.Integer, primary_key=True)
@@ -36,12 +40,14 @@ class CarModel(db.Model):
     description = db.Column(db.Text)
     image_url = db.Column(db.String(255))
 
+
 class Order(db.Model):
     order_id = db.Column(db.Integer, primary_key=True)
     user_id = db.Column(db.Integer, db.ForeignKey('user.user_id'))
     model_id = db.Column(db.Integer, db.ForeignKey('car_model.model_id'))
     order_date = db.Column(db.Date)
     total_price = db.Column(db.Numeric(10, 2))
+
 
 class SalesHistory(db.Model):
     sale_id = db.Column(db.Integer, primary_key=True)
@@ -51,6 +57,7 @@ class SalesHistory(db.Model):
     sale_date = db.Column(db.Date)
     total_price = db.Column(db.Numeric(10, 2))
 
+
 class Advertisement(db.Model):
     ad_id = db.Column(db.Integer, primary_key=True)
     model_id = db.Column(db.Integer, db.ForeignKey('car_model.model_id'))
@@ -59,26 +66,31 @@ class Advertisement(db.Model):
     ad_expiry_date = db.Column(db.Date)
     is_new = db.Column(db.Boolean)
 
+
 class Salesperson(db.Model):
     salesperson_id = db.Column(db.Integer, primary_key=True)
     user_id = db.Column(db.Integer, db.ForeignKey('user.user_id'))
     commission_rate = db.Column(db.Numeric(5, 2))
 
+
 class Superadmin(db.Model):
     superadmin_id = db.Column(db.Integer, primary_key=True)
     user_id = db.Column(db.Integer, db.ForeignKey('user.user_id'))
+
 
 class SalespersonCarModel(db.Model):
     salesperson_car_id = db.Column(db.Integer, primary_key=True)
     salesperson_id = db.Column(db.Integer, db.ForeignKey('user.user_id'))
     model_id = db.Column(db.Integer, db.ForeignKey('car_model.model_id'))
 
+
 @app.route('/create_account')
 def show_create_account_form():
-    return render_template('create_account.html')  
+    return render_template('create_account.html')
 
-#creating an account
-@app.route('/create_account', methods=['GET','POST'])    
+
+# creating an account
+@app.route('/create_account', methods=['GET', 'POST'])
 def create_account():
     full_name = request.form['full_name']
     username = request.form['username']
@@ -87,7 +99,7 @@ def create_account():
     confirm_password = request.form['confirm_password']
     address = request.form['address']
     phone_number = request.form['phone_number']
-    user_level = request.form.get('user_level', 'Buyer/Seller')  
+    user_level = request.form.get('user_level', 'Buyer/Seller')
 
     if password != confirm_password:
         return render_template('create_account.html', error="Passwords do not match.")
@@ -95,7 +107,7 @@ def create_account():
     existing_user = User.query.filter_by(username=username).first()
     if existing_user:
         return render_template('create_account.html', error="Username already exists.")
-    
+
     hashed_password = generate_password_hash(password)
     user_level_enum = UserLevels(user_level)
 
@@ -112,12 +124,32 @@ def create_account():
     )
     db.session.add(new_personal_info)
     db.session.commit()
-    print ("User added")
+    print("User added")
     return redirect(url_for('show_create_account_form'))
 
-@app.route('/login', methods=['GET','POST'])
-def login_account():
-    pass
+
+@app.route('/login')
+def show_login_account_form():
+    return render_template('user_login.html')
+
+
+@app.route('/login', methods=['GET', 'POST'])
+def login():
+    username = request.form['username']
+    password = request.form['password']
+    print(username)
+    print(password)
+
+    existing_user = User.query.filter_by(username=username).first()
+    if existing_user and check_password_hash(existing_user.password, password):
+        return redirect(url_for('show_dashboard_form'))
+
+    return render_template('user_login.html', error="Username and Password dont match")
+
+
+@app.route('/dashboard')
+def show_dashboard_form():
+    return render_template('dashboard.html')
 
 if __name__ == '__main__':
     app.run(debug=True)
