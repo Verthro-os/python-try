@@ -160,7 +160,8 @@ def logout():
 @app.route('/dashboard')
 def show_dashboard_form():
     if 'username' in session:
-        return render_template('dashboard.html')
+        current_user = User.query.filter_by(username=session["username"]).first()
+        return render_template('dashboard.html', user_name=current_user.username,  user_role=current_user.user_level)
     return render_template('user_login.html')
 
 
