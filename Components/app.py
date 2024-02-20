@@ -127,7 +127,7 @@ def create_account():
     db.session.add(new_personal_info)
     db.session.commit()
     print("User added")
-    return redirect(url_for('show_create_account_form'))
+    return redirect(url_for('login'))
 
 
 
