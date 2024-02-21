@@ -3,7 +3,9 @@ from flask_sqlalchemy import SQLAlchemy
 from enum import Enum as PyEnum
 from werkzeug.security import generate_password_hash, check_password_hash
 from datetime import datetime
-
+from flask_wtf import FlaskForm
+from wtforms import StringField, SubmitField
+from wtforms.validators import DataRequired
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///carvis.db'
@@ -41,7 +43,12 @@ class CarModel(db.Model):
     mileage = db.Column(db.Integer)
     price = db.Column(db.Numeric(10, 2))
     description = db.Column(db.Text)
-    image_url = db.Column(db.String(255))
+    image_url = db.Column(db.String(255))  
+    image_url_2 = db.Column(db.String(255))  
+    image_url_3 = db.Column(db.String(255))  
+    fuel_type = db.Column(db.Text)  
+    safety_features = db.Column(db.Text)  
+    additional_details = db.Column(db.Text) 
 
 
 class Order(db.Model):
@@ -192,6 +199,7 @@ def ad_detail(ad_id):
     # Fetch all car model image URLs as a list of strings
     #  car_images = [url for (url,) in CarModel.query.with_entities(CarModel.image_url).all()]
    # return render_template('car_images.html', car_images=car_images)
+
 
 
 if __name__ == '__main__':
