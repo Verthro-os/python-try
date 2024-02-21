@@ -154,8 +154,12 @@ def login():
     existing_user = User.query.filter_by(username=username).first()
     if existing_user and check_password_hash(existing_user.password, password):
         session['username'] = username
-        return redirect(url_for('show_dashboard_form'))
-
+        if existing_user.user_level == UserLevels.BUYER_SELLER:
+            return redirect(url_for('homepage'))
+        else:
+            return redirect(url_for('show_dashboard_form'))
+    
+    
     return render_template('user_login.html', error="Username and Password dont match")
 
 
@@ -175,18 +179,23 @@ def show_dashboard_form():
 
 @app.route('/homepage', methods=['GET', 'POST'])
 def homepage():
-    # Fetching all advertisements and joining with CarModel to get car details
-    ads_with_cars = db.session.query(
-        Advertisement,
-        CarModel.make,
-        CarModel.model,
-        CarModel.year,
-        CarModel.mileage,
-        CarModel.price,
-        CarModel.image_url
-    ).join(CarModel, Advertisement.model_id == CarModel.model_id).all()
-
-    return render_template('homepage.html', ads_with_cars=ads_with_cars)
+    if 'username' in session:
+        current_user = User.query.filter_by(username=session["username"]).first()
+        if current_user.user_level == UserLevels.BUYER_SELLER:
+            ads_with_cars = db.session.query(
+                Advertisement,
+                CarModel.make,
+                CarModel.model,
+                CarModel.year,
+                CarModel.mileage,
+                CarModel.price,
+                CarModel.image_url
+            ).join(CarModel, Advertisement.model_id == CarModel.model_id).all()
+            return render_template('homepage.html', ads_with_cars=ads_with_cars)
+        else:
+            return render_template('user_login.html')
+    else:
+        return render_template('user_login.html')
 
 @app.route('/ad/<int:ad_id>')
 def ad_detail(ad_id):
@@ -194,13 +203,8 @@ def ad_detail(ad_id):
     car_model = CarModel.query.get(advertisement.model_id)
     return render_template('ad_detail.html', advertisement=advertisement, car_model=car_model)
 
-#@app.route('/car-images')
-    #def car_images():
-    # Fetch all car model image URLs as a list of strings
-    #  car_images = [url for (url,) in CarModel.query.with_entities(CarModel.image_url).all()]
-   # return render_template('car_images.html', car_images=car_images)
-
-
-
 if __name__ == '__main__':
     app.run(debug=True)
+
+
+
