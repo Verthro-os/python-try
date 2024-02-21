@@ -98,7 +98,7 @@ body {
     transition: box-shadow 0.3s ease, transform 0.3s ease;
     text-align: center; /* Center text alignment */
     font-size: 1.1rem; /* Larger text */
-    text-decoration: none;
+    text-decoration: solid;
 }
 
 /* Apply the hover effect to the entire listing */
@@ -132,10 +132,12 @@ body {
 /* Condition-based background color */
 .card-content.new {
     background-color: #87b389; /* Green for new cars */
+    text-decoration: solid;
 }
 
 .card-content.used {
     background-color: #778ea1; /* Blue for used cars */
+    text-decoration: solid;
 }
 
 /* Text styling */
@@ -153,6 +155,9 @@ body {
 
 /* Ensure image containers are the same height */
 .card-image {
-    height: 200px; /* Adjust as needed */
+    height: 200px; 
 }
 
+.condition {
+    font-weight: bold; 
+}
