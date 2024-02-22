@@ -165,6 +165,24 @@ def show_dashboard_form():
         return render_template('dashboard.html', user_name=current_user.username,  user_role=current_user.user_level)
     return render_template('user_login.html')
 
+@app.route('/admindashboard')
+def show_admin_dashboard_form():
+    if 'username' in session:
+        current_user = User.query.filter_by(username=session["username"]).first()
+        if current_user.user_level.name == "SUPERADMIN":
+            user_list = []
+            users = User.query.all()
+            for user in users:
+                user_info = PersonalInformation.query.filter_by(user_id=user.user_id).first()
+                user_list.append({"username" : user.username ,"email" : user_info.email})
+
+            print(user_list[0])
+
+            return render_template('admin_dashboard2.html', user_name=current_user.username, users=user_list)
+        else:
+            return render_template("forbidden.html"), 403
+    return render_template('user_login.html')
+
 
 @app.route('/homepage', methods=['GET', 'POST'])
 def homepage():
