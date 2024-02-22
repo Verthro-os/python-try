@@ -3,7 +3,9 @@ from flask_sqlalchemy import SQLAlchemy
 from enum import Enum as PyEnum
 from werkzeug.security import generate_password_hash, check_password_hash
 from datetime import datetime
-
+from flask_wtf import FlaskForm
+from wtforms import StringField, SubmitField
+from wtforms.validators import DataRequired
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///carvis.db'
@@ -41,7 +43,12 @@ class CarModel(db.Model):
     mileage = db.Column(db.Integer)
     price = db.Column(db.Numeric(10, 2))
     description = db.Column(db.Text)
-    image_url = db.Column(db.String(255))
+    image_url = db.Column(db.String(255))  
+    image_url_2 = db.Column(db.String(255))  
+    image_url_3 = db.Column(db.String(255))  
+    fuel_type = db.Column(db.Text)  
+    safety_features = db.Column(db.Text)  
+    additional_details = db.Column(db.Text) 
 
 
 class Order(db.Model):
@@ -147,8 +154,12 @@ def login():
     existing_user = User.query.filter_by(username=username).first()
     if existing_user and check_password_hash(existing_user.password, password):
         session['username'] = username
-        return redirect(url_for('show_dashboard_form'))
-
+        if existing_user.user_level == UserLevels.BUYER_SELLER:
+            return redirect(url_for('homepage'))
+        else:
+            return redirect(url_for('show_dashboard_form'))
+    
+    
     return render_template('user_login.html', error="Username and Password dont match")
 
 
@@ -186,35 +197,32 @@ def show_admin_dashboard_form():
 
 @app.route('/homepage', methods=['GET', 'POST'])
 def homepage():
-    # Fetching all advertisements and joining with CarModel to get car details
-    ads_with_cars = db.session.query(
-        Advertisement,
-        CarModel.make,
-        CarModel.model,
-        CarModel.year,
-        CarModel.mileage,
-        CarModel.price,
-        CarModel.image_url
-    ).join(CarModel, Advertisement.model_id == CarModel.model_id).all()
-
-    return render_template('homepage.html', ads_with_cars=ads_with_cars)
+    if 'username' in session:
+        current_user = User.query.filter_by(username=session["username"]).first()
+        if current_user.user_level == UserLevels.BUYER_SELLER:
+            ads_with_cars = db.session.query(
+                Advertisement,
+                CarModel.make,
+                CarModel.model,
+                CarModel.year,
+                CarModel.mileage,
+                CarModel.price,
+                CarModel.image_url
+            ).join(CarModel, Advertisement.model_id == CarModel.model_id).all()
+            return render_template('homepage.html', ads_with_cars=ads_with_cars)
+        else:
+            return render_template('user_login.html')
+    else:
+        return render_template('user_login.html')
 
 @app.route('/ad/<int:ad_id>')
 def ad_detail(ad_id):
-    # Fetch the specific advertisement by ad_id
     advertisement = Advertisement.query.get_or_404(ad_id)
-    # Fetch the associated car model details
     car_model = CarModel.query.get(advertisement.model_id)
-    
-    # Render a template for the ad detail page, passing the advertisement and car model
     return render_template('ad_detail.html', advertisement=advertisement, car_model=car_model)
-
-#@app.route('/car-images')
-    #def car_images():
-    # Fetch all car model image URLs as a list of strings
-    #  car_images = [url for (url,) in CarModel.query.with_entities(CarModel.image_url).all()]
-   # return render_template('car_images.html', car_images=car_images)
-
 
 if __name__ == '__main__':
     app.run(debug=True)
+
+
+
