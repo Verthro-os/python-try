@@ -178,7 +178,7 @@ def show_admin_dashboard_form():
 
             print(user_list[0])
 
-            return render_template('admin_dashboard2.html', user_name=current_user.username, users=user_list)
+            return render_template('admin_dashboard2.html', user_name=current_user.username, users=user_list) #Just testing
         else:
             return render_template("forbidden.html"), 403
     return render_template('user_login.html')
