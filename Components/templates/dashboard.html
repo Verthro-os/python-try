@@ -5,7 +5,10 @@
     <title>Dashboard</title>
 </head>
 <body>
+    {% extends "navbar.html" %}
+    {% block content %}
  <p>Username -> {{ user_name }}</p>
  <p>Role -> {{ user_role }}</p>
 </body>
+
 </html>

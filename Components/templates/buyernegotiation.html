@@ -1,0 +1,36 @@
+<link rel="stylesheet" href="{{ url_for('static', filename='css/style_passordc.css') }}">
+
+
+<body>
+    {% extends "navbar.html" %}
+    {% block content %}
+    <main>
+        <div id="section1">
+            <button class="back" onclick="window.history.back();">
+                < back</button>
+        </div>
+    
+        <div class="section2">
+            <div id="column">
+                <div class="container">
+                    <h1>Request Price</h1><br>
+    
+                    <div class="form-style">
+                        <form>
+                            <fieldset>
+                                <input type="text" placeholder="Ask Price">
+                                <input type="text" placeholder="Reason">
+                            </fieldset>
+                            <button type="submit" class="button2">Send</button>
+                        </form>
+                    </div>
+    
+                </div>
+            </div>
+        </div>
+        </div>
+    
+    </body>
+</main>
+</body>
+{% endblock %}

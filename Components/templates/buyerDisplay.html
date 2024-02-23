@@ -1,0 +1,54 @@
+<link rel="stylesheet" href="{{ url_for('static', filename='css/style_sb.css') }}">
+
+<body>
+    {% extends "navbar.html" %}
+    {% block content %}
+<main>
+    <div id="section1">
+        <button class="back" onclick="window.history.back();">
+            < back</button>
+    </div>
+
+    <div class="section2">
+        <div id="column">
+            <div class="container">
+                <h1>Hi Buyer</h1><br>
+                <legend>Here vou can edit your information</legend>
+
+                <div class="form-style">
+                    <form>
+                        <fieldset>
+                            <input type="text" placeholder="Name and Surname">
+                            <input type="text" placeholder="Email">
+                            <input type="text" placeholder="Password">
+                            <input type="text" placeholder="Address">
+                            <input type="text" placeholder="Bank Account">
+
+
+                        </fieldset>
+                        <button type="submit" class="button1">Change Password</button>
+                        <button type="submit" class="button2">Upload Change</button>
+                    </form>
+                </div>
+
+            </div>
+            <div class="vl"></div>
+
+            <div class="container">
+                <div class="container-sub">
+                    <br><br><br><h2>Your Car History</h2><br>
+                    <button class="button1" role="button">Car Name | Used <span class="arror-btn">></span></button>
+                    <button class="button1" role="button">Car Name | Used <span class="arror-btn">></span></button>
+
+                    <h2>Your Previous Offer</h2><br />
+                    <button class="button1" role="button">Car Name | Date of Offer <span
+                            class="arror-btn">></span></button>
+                </div>
+            </div>
+
+        </div>
+    </div>
+    </div>
+</main>
+</body>
+{% endblock %}

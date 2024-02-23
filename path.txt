@@ -1,0 +1,15 @@
+/agentdashboard
+/sellerdashboard
+/buyerdashboard
+/superadmindashboard
+/sellerview
+/changepassword
+/confirmpassword
+/buyerask
+/askconfirm
+
+/homepage
+/dashboard
+/logout
+/login
+/create_account

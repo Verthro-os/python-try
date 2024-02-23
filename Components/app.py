@@ -8,6 +8,10 @@ from wtforms import StringField, SubmitField
 from wtforms.validators import DataRequired
 
 app = Flask(__name__)
+
+#chawin only dont change!!
+#app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:////Users/chs/Desktop/flaskproject21/python-try/Components/instance/carvis.db'
+
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///carvis.db'
 db = SQLAlchemy(app)
 app.secret_key = 'eb3d197e1633fd5193f89ff8b2887923d12645b647a97893'
@@ -200,7 +204,41 @@ def ad_detail(ad_id):
     #  car_images = [url for (url,) in CarModel.query.with_entities(CarModel.image_url).all()]
    # return render_template('car_images.html', car_images=car_images)
 
+@app.route('/agentdashboard')
+def agentdashboard():
+    return render_template('agentDisplay.html')
 
+@app.route('/sellerdashboard')
+def sellerdashboard():
+    return render_template('sellerDisplay.html')
+
+@app.route('/buyerdashboard')
+def buyerdashboard():
+    return render_template('buyerDisplay.html')
+
+@app.route('/superadmindashboard')
+def superadmindashboard():
+    return render_template('superadmin_dashboard.html')
+
+@app.route('/sellerview')
+def sellerview():
+    return render_template('sellerview.html')
+
+@app.route('/changepassword')
+def changepassword():
+    return render_template('changePassword.html')
+
+@app.route('/confirmpassword')
+def confirmpassword():
+    return render_template('passwordConfirm.html')
+
+@app.route('/buyerask')
+def buyerask():
+    return render_template('buyernegotiation.html')
+
+@app.route('/askconfirm')
+def askconfirm():
+    return render_template('negotiationconfirm.html')
 
 if __name__ == '__main__':
     app.run(debug=True)
