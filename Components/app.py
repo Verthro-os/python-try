@@ -158,8 +158,12 @@ def login():
     existing_user = User.query.filter_by(username=username).first()
     if existing_user and check_password_hash(existing_user.password, password):
         session['username'] = username
-        return redirect(url_for('show_dashboard_form'))
-
+        if existing_user.user_level == UserLevels.BUYER_SELLER:
+            return redirect(url_for('homepage'))
+        else:
+            return redirect(url_for('show_dashboard_form'))
+    
+    
     return render_template('user_login.html', error="Username and Password dont match")
 
 
@@ -176,21 +180,44 @@ def show_dashboard_form():
         return render_template('dashboard.html', user_name=current_user.username,  user_role=current_user.user_level)
     return render_template('user_login.html')
 
+@app.route('/admindashboard')
+def show_admin_dashboard_form():
+    if 'username' in session:
+        current_user = User.query.filter_by(username=session["username"]).first()
+        if current_user.user_level.name == "SUPERADMIN":
+            user_list = []
+            users = User.query.all()
+            for user in users:
+                user_info = PersonalInformation.query.filter_by(user_id=user.user_id).first()
+                user_list.append({"username" : user.username ,"email" : user_info.email})
+
+            print(user_list[0])
+
+            return render_template('admin_dashboard2.html', user_name=current_user.username, users=user_list) #Just testing
+        else:
+            return render_template("forbidden.html"), 403
+    return render_template('user_login.html')
+
 
 @app.route('/homepage', methods=['GET', 'POST'])
 def homepage():
-    # Fetching all advertisements and joining with CarModel to get car details
-    ads_with_cars = db.session.query(
-        Advertisement,
-        CarModel.make,
-        CarModel.model,
-        CarModel.year,
-        CarModel.mileage,
-        CarModel.price,
-        CarModel.image_url
-    ).join(CarModel, Advertisement.model_id == CarModel.model_id).all()
-
-    return render_template('homepage.html', ads_with_cars=ads_with_cars)
+    if 'username' in session:
+        current_user = User.query.filter_by(username=session["username"]).first()
+        if current_user.user_level == UserLevels.BUYER_SELLER:
+            ads_with_cars = db.session.query(
+                Advertisement,
+                CarModel.make,
+                CarModel.model,
+                CarModel.year,
+                CarModel.mileage,
+                CarModel.price,
+                CarModel.image_url
+            ).join(CarModel, Advertisement.model_id == CarModel.model_id).all()
+            return render_template('homepage.html', ads_with_cars=ads_with_cars)
+        else:
+            return render_template('user_login.html')
+    else:
+        return render_template('user_login.html')
 
 @app.route('/ad/<int:ad_id>')
 def ad_detail(ad_id):
@@ -242,3 +269,6 @@ def askconfirm():
 
 if __name__ == '__main__':
     app.run(debug=True)
+
+
+
