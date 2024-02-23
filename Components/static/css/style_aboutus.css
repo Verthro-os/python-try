@@ -1,0 +1,58 @@
+/* base */
+* {
+  font-family: "Basier circle", -apple-system, system-ui;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  width: 100%;
+  min-height: auto;
+  font-size: 10px;
+  padding: 0px auto;
+
+}
+
+/*back button*/
+#section1 {
+  justify-content: center;
+  align-items: center;
+  margin-top: 100px;
+  margin-bottom: 15px;
+  text-align: center;
+  outline: none;
+  border: none;
+}
+
+.back:hover {
+  color: red;
+}
+
+/*body base*/
+.section2 {
+  margin-bottom: 10px;
+  
+  
+}
+
+#column {
+  display: flex;
+  justify-content: space-around;
+  max-width: 1200px;
+  margin: 10px auto;
+}
+
+.container {
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 15px;
+  text-align: center;
+  outline: none;
+  border: none;
+}
+
+img{
+  width: 1px;
+  height: 1px;
+}

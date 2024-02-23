@@ -59,11 +59,11 @@ body {
 
 /* Hero section styling */
 .hero {
-    background-image: url('/static/img/banner.jpg');
+    background-image: url('/static/img/banner2.jpg');
     background-size: cover;
-    background-position: center;
+    background-position: 100px -900px;
     color: #fff;
-    padding: 200px 0;
+    padding: 150px 0;
     text-align: center;
     font-size: 30px; 
     text-shadow: 2px 2px 4px rgba(0,0,0,0.5); 

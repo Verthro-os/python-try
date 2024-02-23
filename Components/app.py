@@ -267,6 +267,10 @@ def buyerask():
 def askconfirm():
     return render_template('negotiationconfirm.html')
 
+@app.route('/aboutus')
+def aboutus():
+    return render_template('aboutus.html')
+
 if __name__ == '__main__':
     app.run(debug=True)
 

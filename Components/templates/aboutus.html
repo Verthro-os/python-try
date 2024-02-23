@@ -1,0 +1,50 @@
+
+<link rel="stylesheet" href="{{ url_for('static', filename='css/style_aboutus.css') }}">
+
+<body>
+{% extends "navbar.html" %}
+{% block content %}
+<main>
+<div id="section1">
+    <h1>We help you find a car, safely.</h1><br>
+
+    <h2>Founded in 2021, CARVIS is a small company that helps sellers and buyers find and sell cars, in a safe
+        and easy way.<br> We are based in Berlin, Germany.<br><br>
+        If you want to partner with us, you can contact us at:<br>
+        carvis@hello.com
+    </h2>
+</div>
+
+<div class="section2">
+    <div class="section2">
+        <div id="column">
+            <div class="container">
+                <div class="card-image">
+                    <img src="{{ url_for('static', filename="images/about/1.png") }}" alt="{{ make }} {{ model }}" style="width: 200px; height: 200px;">
+                </div>
+            </div>
+            <div class="container">
+                <div class="card-image">
+                    <img src="{{ url_for('static', filename="images/about/2.png") }}" alt="{{ make }} {{ model }}" style="width: 200px; height: 200px;">
+                </div>
+            </div>
+            <div class="container">
+                <div class="card-image">
+                    <img src="{{ url_for('static', filename="images/about/3.png") }}" alt="{{ make }} {{ model }}" style="width: 200px; height: 200px;">
+                </div>
+            </div>
+            <div class="container">
+                <div class="card-image">
+                    <img src="{{ url_for('static', filename="images/about/4.png") }}" alt="{{ make }} {{ model }}" style="width: 200px; height: 200px;">
+                </div>
+            </div>
+
+        </div>
+    </div>
+    </div>
+</div>
+</div>
+</main>
+</body>
+{% endblock %}
+
