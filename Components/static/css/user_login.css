@@ -6,12 +6,12 @@ main {
     display: flex;
     justify-content: center;
     align-items: center;
-    height: 70vh;
+    height: 90vh;        
 }
 
 .container {
     text-align: center;
-    background-color: white;
+    background-color: #f4f4f4;
     padding: 20px;
     width: 300px;
     box-shadow: 0 0 10px rgba(0,0,0,0.1);

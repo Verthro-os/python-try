@@ -235,13 +235,9 @@ def ad_detail(ad_id):
 def agentdashboard():
     return render_template('agentDisplay.html')
 
-@app.route('/sellerdashboard')
-def sellerdashboard():
-    return render_template('sellerDisplay.html')
-
-@app.route('/buyerdashboard')
-def buyerdashboard():
-    return render_template('buyerDisplay.html')
+@app.route('/account')
+def account():
+    return render_template('account.html')
 
 @app.route('/superadmindashboard')
 def superadmindashboard():

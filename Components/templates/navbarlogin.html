@@ -6,7 +6,7 @@
     <title>CARVIS - Find Your Dream Car</title>
     <link
       rel="stylesheet"
-      href="{{ url_for('static', filename='css/homepage.css') }}"
+      href="{{ url_for('static', filename='css/navbar.css') }}"
     />
   </head>
   <header class="site-header">
@@ -23,11 +23,11 @@
     </div>
   </header>
   {% block content %} {% endblock %}
-  <footer>
+  <footer style="background: #191919; z-index: 1; color: #fff; padding-top: 5px; padding-bottom: 5px; left: 0; bottom: 0; width: 100%;">
     <div class="wrapper">
-      <p>© 2024 CARVIS. All rights reserved.</p>
-      <p><a href="/privacy">Privacy Policy</a> | <a href="/terms">Terms of Service</a></p>
+        <p>© 2024 CARVIS. All rights reserved.</p>
+        <p><a href="/privacy" style="color: #fff;">Privacy Policy</a> | <a href="/terms" style="color: #fff;">Terms of Service</a></p>
     </div>
-  </footer>
+</footer>
 </body>
 </html>
