@@ -8,6 +8,10 @@ from wtforms import StringField, SubmitField
 from wtforms.validators import DataRequired
 
 app = Flask(__name__)
+
+#chawin only dont change!!
+#app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:////Users/chs/Desktop/flaskproject21/python-try/Components/instance/carvis.db'
+
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///carvis.db'
 db = SQLAlchemy(app)
 app.secret_key = 'eb3d197e1633fd5193f89ff8b2887923d12645b647a97893'
@@ -176,6 +180,24 @@ def show_dashboard_form():
         return render_template('dashboard.html', user_name=current_user.username,  user_role=current_user.user_level)
     return render_template('user_login.html')
 
+@app.route('/admindashboard')
+def show_admin_dashboard_form():
+    if 'username' in session:
+        current_user = User.query.filter_by(username=session["username"]).first()
+        if current_user.user_level.name == "SUPERADMIN":
+            user_list = []
+            users = User.query.all()
+            for user in users:
+                user_info = PersonalInformation.query.filter_by(user_id=user.user_id).first()
+                user_list.append({"username" : user.username ,"email" : user_info.email})
+
+            print(user_list[0])
+
+            return render_template('admin_dashboard2.html', user_name=current_user.username, users=user_list) #Just testing
+        else:
+            return render_template("forbidden.html"), 403
+    return render_template('user_login.html')
+
 
 @app.route('/homepage', methods=['GET', 'POST'])
 def homepage():
@@ -229,6 +251,52 @@ def ad_detail(ad_id):
         fuel_economy_details=fuel_economy_details,
         error=error
     )
+
+#@app.route('/car-images')
+    #def car_images():
+    # Fetch all car model image URLs as a list of strings
+    #  car_images = [url for (url,) in CarModel.query.with_entities(CarModel.image_url).all()]
+   # return render_template('car_images.html', car_images=car_images)
+
+@app.route('/agentdashboard')
+def agentdashboard():
+    return render_template('agentDisplay.html')
+
+@app.route('/sellerdashboard')
+def sellerdashboard():
+    return render_template('sellerDisplay.html')
+
+@app.route('/buyerdashboard')
+def buyerdashboard():
+    return render_template('buyerDisplay.html')
+
+@app.route('/superadmindashboard')
+def superadmindashboard():
+    return render_template('superadmin_dashboard.html')
+
+@app.route('/sellerview')
+def sellerview():
+    return render_template('sellerview.html')
+
+@app.route('/changepassword')
+def changepassword():
+    return render_template('changePassword.html')
+
+@app.route('/confirmpassword')
+def confirmpassword():
+    return render_template('passwordConfirm.html')
+
+@app.route('/buyerask')
+def buyerask():
+    return render_template('buyernegotiation.html')
+
+@app.route('/askconfirm')
+def askconfirm():
+    return render_template('negotiationconfirm.html')
+
+@app.route('/aboutus')
+def aboutus():
+    return render_template('aboutus.html')
 
 if __name__ == '__main__':
     app.run(debug=True)

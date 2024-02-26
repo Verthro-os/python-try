@@ -6,7 +6,11 @@
     <title>Carvis - Car Dealership Manager</title>
      <link rel="stylesheet" href="{{ url_for('static', filename='css/user_login.css') }}">
 </head>
+
 <body>
+    {% extends "navbarlogin.html" %}
+    {% block content %}
+    <main>
 <div class="form-container">
         {% if error %}
         <div class="error-message">
@@ -31,5 +35,7 @@
             <p>Don't have an account? <a href="{{ url_for('create_account') }}">Register</a></p>
         </div>
     </div>
+</main>
 </body>
+{% endblock %}
 </html>

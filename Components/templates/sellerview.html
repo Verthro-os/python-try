@@ -1,0 +1,51 @@
+<link rel="stylesheet" href="{{ url_for('static', filename='css/styleSellerView.css') }}">
+
+<body>
+    {% extends "navbar.html" %}
+    {% block content %}
+    <main>
+        <div id="section1">
+            <button class="back" onclick="window.history.back();">
+                < back</button>
+        </div>
+    
+        <div class="section2">
+            <div id="column">
+                <div class="container">
+                    <h1>Seller View</h1><br>
+                    <h2>Sale Records</h2><br>
+                    <div class="form-style">
+                        <a href=""><p>hi</p></a>
+                        <a href=""><p>hi</p></a>
+                    </div>
+    
+                    <h2>Offer Records</h2><br>
+                    <div class="form-style">
+                        <a href=""><p>hi</p></a>
+                        <a href=""><p>hi</p></a>
+                    </div>
+    
+                    <h2>Request Record</h2><br>
+                    <div class="form-style">
+                        <a href=""><p>hi</p></a>
+                        <a href=""><p>hi</p></a>
+                    </div>
+    
+                </div>
+                <div class="vl"></div>
+    
+                <div class="container">
+                    <div class="container-sub">
+                        <br><br><br><h2>Your Previous Ads</h2><br>
+                        <button class="button1" role="button">Assistance request <span
+                                class="arror-btn">></span></button>
+                    </div>
+                </div>
+    
+            </div>
+        </div>
+        </div>
+</main>
+</body>
+{% endblock %}
+</html>

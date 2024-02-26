@@ -7,20 +7,8 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='css/homepage.css') }}">
 </head>
 <body>
-    <header class="site-header">
-        <div class="wrapper">
-            <div class="header-content">
-                <a href="/homepage" class="brand-logo">CARVIS</a>
-                <nav class="site-nav">
-                    <ul>
-                        <li><a href="/account">Account</a></li>
-                        <li><a href="/about">About</a></li>
-                        <li><a href="/logout">Logout</a></li>
-                    </ul>
-                </nav>
-            </div>
-        </div>
-    </header>
+    {% extends "navbar.html" %}
+    {% block content %}
     <main>
         <section class="hero">
             <div class="wrapper">
@@ -50,4 +38,5 @@
         </section>
     </main>
 </body>
+{% endblock %}
 </html> 
