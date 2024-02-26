@@ -22,7 +22,6 @@ class UserLevels(PyEnum):
     SALESPERSON = 'Salesperson'
     SUPERADMIN = 'Superadmin'
 
-
 class User(db.Model):
     user_id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(50), unique=True, nullable=False)
@@ -30,14 +29,12 @@ class User(db.Model):
     user_level = db.Column(db.Enum(UserLevels), nullable=False)
     personal_info = db.relationship('PersonalInformation', backref='user', uselist=False)
 
-
 class PersonalInformation(db.Model):
-    user_id = db.Column(db.Integer, db.ForeignKey('user.user_id'), primary_key=True)
+    user_id = db.Column(db.Integer, db.ForeignKey('user.user_id', ondelete='CASCADE'), primary_key=True)
     full_name = db.Column(db.String(100))
     email = db.Column(db.String(100))
     phone_number = db.Column(db.String(20))
     address = db.Column(db.Text)
-
 
 class CarModel(db.Model):
     model_id = db.Column(db.Integer, primary_key=True)
@@ -54,48 +51,42 @@ class CarModel(db.Model):
     safety_features = db.Column(db.Text)  
     additional_details = db.Column(db.Text) 
 
-
 class Order(db.Model):
     order_id = db.Column(db.Integer, primary_key=True)
-    user_id = db.Column(db.Integer, db.ForeignKey('user.user_id'))
-    model_id = db.Column(db.Integer, db.ForeignKey('car_model.model_id'))
+    user_id = db.Column(db.Integer, db.ForeignKey('user.user_id', ondelete='CASCADE'))
+    model_id = db.Column(db.Integer, db.ForeignKey('car_model.model_id', ondelete='CASCADE'))
     order_date = db.Column(db.Date)
     total_price = db.Column(db.Numeric(10, 2))
 
-
 class SalesHistory(db.Model):
     sale_id = db.Column(db.Integer, primary_key=True)
-    salesperson_id = db.Column(db.Integer, db.ForeignKey('user.user_id'))
-    buyer_id = db.Column(db.Integer, db.ForeignKey('user.user_id'))
-    model_id = db.Column(db.Integer, db.ForeignKey('car_model.model_id'))
+    salesperson_id = db.Column(db.Integer, db.ForeignKey('user.user_id', ondelete='CASCADE'))
+    buyer_id = db.Column(db.Integer, db.ForeignKey('user.user_id', ondelete='CASCADE'))
+    model_id = db.Column(db.Integer, db.ForeignKey('car_model.model_id', ondelete='CASCADE'))
     sale_date = db.Column(db.Date)
     total_price = db.Column(db.Numeric(10, 2))
 
-
 class Advertisement(db.Model):
     ad_id = db.Column(db.Integer, primary_key=True)
-    model_id = db.Column(db.Integer, db.ForeignKey('car_model.model_id'))
+    model_id = db.Column(db.Integer, db.ForeignKey('car_model.model_id', ondelete='CASCADE'))
     ad_title = db.Column(db.String(255))
     ad_description = db.Column(db.Text)
     ad_expiry_date = db.Column(db.Date)
     is_new = db.Column(db.Boolean)
 
-
 class Salesperson(db.Model):
-    salesperson_id = db.Column(db.Integer, primary_key=True)
-    user_id = db.Column(db.Integer, db.ForeignKey('user.user_id'))
+    salesperson_id = db.Column(db.Integer, db.ForeignKey('user.user_id', ondelete='CASCADE'), primary_key=True)
+    user_id = db.Column(db.Integer, db.ForeignKey('user.user_id', ondelete='CASCADE'))
     commission_rate = db.Column(db.Numeric(5, 2))
 
-
 class Superadmin(db.Model):
-    superadmin_id = db.Column(db.Integer, primary_key=True)
-    user_id = db.Column(db.Integer, db.ForeignKey('user.user_id'))
-
+    superadmin_id = db.Column(db.Integer, db.ForeignKey('user.user_id', ondelete='CASCADE'), primary_key=True)
+    user_id = db.Column(db.Integer, db.ForeignKey('user.user_id', ondelete='CASCADE'))
 
 class SalespersonCarModel(db.Model):
     salesperson_car_id = db.Column(db.Integer, primary_key=True)
-    salesperson_id = db.Column(db.Integer, db.ForeignKey('user.user_id'))
-    model_id = db.Column(db.Integer, db.ForeignKey('car_model.model_id'))
+    salesperson_id = db.Column(db.Integer, db.ForeignKey('salesperson.salesperson_id', ondelete='CASCADE'))
+    model_id = db.Column(db.Integer, db.ForeignKey('car_model.model_id', ondelete='CASCADE'))
 
 
 @app.route('/create_account')
@@ -219,11 +210,38 @@ def homepage():
     else:
         return render_template('user_login.html')
 
-@app.route('/ad/<int:ad_id>')
+
+@app.route('/ad/<int:ad_id>', methods=['GET', 'POST'])
 def ad_detail(ad_id):
     advertisement = Advertisement.query.get_or_404(ad_id)
-    car_model = CarModel.query.get(advertisement.model_id)
-    return render_template('ad_detail.html', advertisement=advertisement, car_model=car_model)
+    car_model = CarModel.query.get_or_404(advertisement.model_id)
+    error = None
+
+    if request.method == 'POST':
+        name = request.form['name']
+        email = request.form['email']
+        country = request.form['country']
+        bank_account = float(request.form['bank_account'])
+        negotiation_price = float(request.form.get('negotiation_price', 0))
+
+        asking_price = float(car_model.price)
+        price_to_check = negotiation_price if negotiation_price else asking_price
+
+        if bank_account < price_to_check:
+            error = "Insufficient funds in the bank account for this purchase."
+        else:
+            # Proceed with creating the buy request
+            # Save to database or perform other actions
+            pass
+
+    fuel_economy_details = car_model.fuel_economy.split(",") if car_model.fuel_economy else []
+    return render_template(
+        'ad_detail.html',
+        advertisement=advertisement,
+        car_model=car_model,
+        fuel_economy_details=fuel_economy_details,
+        error=error
+    )
 
 #@app.route('/car-images')
     #def car_images():
