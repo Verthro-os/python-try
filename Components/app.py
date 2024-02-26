@@ -197,11 +197,38 @@ def homepage():
     else:
         return render_template('user_login.html')
 
-@app.route('/ad/<int:ad_id>')
+
+@app.route('/ad/<int:ad_id>', methods=['GET', 'POST'])
 def ad_detail(ad_id):
     advertisement = Advertisement.query.get_or_404(ad_id)
-    car_model = CarModel.query.get(advertisement.model_id)
-    return render_template('ad_detail.html', advertisement=advertisement, car_model=car_model)
+    car_model = CarModel.query.get_or_404(advertisement.model_id)
+    error = None
+
+    if request.method == 'POST':
+        name = request.form['name']
+        email = request.form['email']
+        country = request.form['country']
+        bank_account = float(request.form['bank_account'])
+        negotiation_price = float(request.form.get('negotiation_price', 0))
+
+        asking_price = float(car_model.price)
+        price_to_check = negotiation_price if negotiation_price else asking_price
+
+        if bank_account < price_to_check:
+            error = "Insufficient funds in the bank account for this purchase."
+        else:
+            # Proceed with creating the buy request
+            # Save to database or perform other actions
+            pass
+
+    fuel_economy_details = car_model.fuel_economy.split(",") if car_model.fuel_economy else []
+    return render_template(
+        'ad_detail.html',
+        advertisement=advertisement,
+        car_model=car_model,
+        fuel_economy_details=fuel_economy_details,
+        error=error
+    )
 
 if __name__ == '__main__':
     app.run(debug=True)

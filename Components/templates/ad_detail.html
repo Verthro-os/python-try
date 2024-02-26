@@ -1,3 +1,82 @@
-<Html>
-    
-</Html>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Car Advertisement Detail</title>
+    <link rel="stylesheet" href="/static/styles.css">
+    <!-- Include other head elements like CSS files or JavaScript -->
+</head>
+<body>
+    <header class="site-header">
+        <div class="wrapper">
+            <div class="header-content">
+                <a href="/homepage" class="brand-logo">CARVIS</a>
+                <nav class="site-nav">
+                    <ul>
+                        <li><a href="/account">Account</a></li>
+                        <li><a href="/about">About</a></li>
+                        <li><a href="/logout">Logout</a></li>
+                    </ul>
+                </nav>
+            </div>
+        </div>
+    </header>
+
+    <div class="ad-detail-container">
+        <a href="{{ url_for('homepage') }}">← Back</a>
+        <div class="ad-heading">
+            <h1>{{ car_model.year }} {{ car_model.make }} {{ car_model.model }}</h1>
+            <h2>({{ 'NEW' if advertisement.is_new else 'USED' }})</h2>
+        </div>
+        <div class="ad-detail-grid">
+            <div class="car-images">
+                <img src="{{ car_model.image_url }}" alt="Main Image">
+                {% if car_model.image_url_2 %}
+                <img src="{{ car_model.image_url_2 }}" alt="Image 2">
+                {% endif %}
+                {% if car_model.image_url_3 %}
+                <img src="{{ car_model.image_url_3 }}" alt="Image 3">
+                {% endif %}
+            </div>
+            <div class="car-info">
+                <h2>Overview</h2>
+                <!-- Your existing car details here -->
+
+                <h2>Fuel Economy</h2>
+                {% for detail in car_model.fuel_economy.split(',') %}
+                    <p>{{ detail.strip() }}</p>
+                {% endfor %}
+
+                <h2>Safety</h2>
+                {% for feature in car_model.safety_features.split(',') %}
+                    <p>{{ feature.strip() }}</p>
+                {% endfor %}
+
+                <h2>Additional Details</h2>
+                {% for detail in car_model.additional_details.split(',') %}
+                    <p>{{ detail.strip() }}</p>
+                {% endfor %}
+
+                <h2>Pricing</h2>
+                <p>${{ car_model.price }}</p>
+            </div>
+            <div class="car-buy-request">
+                <h2>Buy Request</h2>
+                <form method="post">
+                    <input type="text" name="name" placeholder="Name and Surname" required>
+                    <input type="email" name="email" placeholder="Email" required>
+                    <input type="text" name="country" placeholder="Country" required>
+
+{% if not advertisement.is_new %}
+<input type="text" name="negotiation_price" placeholder="New Negotiation Price" required>
+{% endif %}
+<button type="submit">Create Buy Request</button>
+</form>
+</div>
+</div>
+</div>
+
+php
+Copy code
+</body>
+</html>
