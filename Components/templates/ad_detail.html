@@ -1,3 +1,75 @@
-<Html>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{{ car_model.year }} {{ car_model.make }} {{ car_model.model }} Details</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/add_detail.css') }}">
+</head>
+<body>
+    {% extends "navbar.html" %}
+    {% block content %}
     
-</Html>
+    <div class="ad-detail-container">
+        <a href="{{ url_for('homepage') }}">← Back</a>
+        <div class="ad-heading">
+            <h1>{{ car_model.year }} {{ car_model.make }} {{ car_model.model }}</h1>
+            <h2>({{ 'NEW' if advertisement.is_new else 'USED' }})</h2>
+        </div>
+        <div class="car-images">
+            <img src="{{ url_for('static', filename=car_model.image_url) }}" alt="Main Image">
+            {% if car_model.image_url_2 %}
+                <img src="{{ url_for('static', filename=car_model.image_url_2) }}" alt="Image 2">
+            {% endif %}
+            {% if car_model.image_url_3 %}
+                <img src="{{ url_for('static', filename=car_model.image_url_3) }}" alt="Image 3">
+            {% endif %}
+        </div>
+        <div class="ad-detail-grid">
+            <div class="car-info">
+                <h2>Overview</h2>
+                {% for detail in car_model.additional_details.split(',') %}
+                    <p>{{ detail.strip() }}</p>
+                {% endfor %}
+                
+                <h2>Fuel Economy</h2>
+                {% for detail in car_model.fuel_type.split(',') %}
+                    <p>{{ detail.strip() }}</p>
+                {% endfor %}
+                
+                <h2>Safety</h2>
+                {% for feature in car_model.safety_features.split(',') %}
+                    <p>{{ feature.strip() }}</p>
+                {% endfor %}
+                
+                <h2>Pricing</h2>
+                <p>${{ car_model.price }}</p>
+            </div>
+            <div class="car-buy-request">
+                <h2>Buy Request</h2>
+                <form method="post">
+                    <input type="text" name="name" placeholder="Name and Surname" required>
+                    <input type="email" name="email" placeholder="Email" required>
+                    <input type="text" name="country" placeholder="Country" required>
+                    <input type="number" name="bank_account" placeholder="Bank Account" required min="0" step="any" >
+                    {% if not advertisement.is_new %}
+                    <input type="number" name="negotiation_price" placeholder="New Negotiation Price" required min="0" step="any">
+                    {% endif %}
+                    {% with messages = get_flashed_messages(with_categories=true) %}
+                        {% if messages %}
+                            {% for category, message in messages %}
+                                 <div class="flash-message {{ category }}">
+                                 {{ message }}
+                                 </div>
+                            {% endfor %}
+                        {% endif %}
+                    {% endwith %}
+
+                    <button type="submit">Create Buy Request</button>
+                </form>
+            </div>
+        </div>
+    </div>
+    
+    {% endblock %}
+</body>
+</html>

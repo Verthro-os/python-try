@@ -7,7 +7,7 @@ body, h1, h2, ul {
 /* Basic body styling */
 body {
     font-family: 'Arial', sans-serif;
-    background-color: #f4f4f4;
+    background-color: #e2e8f0;
     color: #333;
     line-height: 1.6;
 }
@@ -20,54 +20,43 @@ body {
     overflow: hidden;
 }
 
-/* Header styling */
-.site-header {
-    background: #333;
-    color: #fff;
-    padding: 20px 0;
-    
-}
-
-.header-content {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-}
-
-.brand-logo {
-    font-size: 30px;
-    font-weight: bold;
-    text-decoration: none;
-    color: #fff;
-}
-
-.site-nav ul {
-    list-style: none;
-    display: flex;
-}
-
-.site-nav ul li {
-    margin-left: 20px;
-}
-
-.site-nav ul li a {
-    color: #fafafa;
-    text-decoration: none;
-    font-weight: bold;
-    font-size: 20px;
-}
-
 /* Hero section styling */
 .hero {
     background-image: url('/static/img/banner2.jpg');
     background-size: cover;
-    background-position: 100px -900px;
-    color: #fff;
-    padding: 150px 0;
+    background-position: 100px -940px;
+    color: rgba(255, 255, 255, 0.4);
+    padding: 40px 0;
     text-align: center;
-    font-size: 30px; 
+    font-size: 60px; 
     text-shadow: 2px 2px 4px rgba(0,0,0,0.5); 
+    
 }
+.subset{
+    background-color: #1b1b1b;
+    padding: 4px;
+    margin-bottom: 2px;
+}
+
+.subset2{
+    background-color: #1b1b1b;
+    padding: 1px;
+    margin-bottom: 2px;
+}
+
+.subset1{
+    background-color: #1b1b1b;
+    padding: 0.5px;
+    margin-bottom: 2px;
+}
+
+/**/
+.section2 {
+    margin-bottom: 5px;
+    
+    
+  }
+
 /* Gallery section styling */
 .gallery {
     padding: 40px 0;

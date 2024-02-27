@@ -14,35 +14,9 @@ body {
 
 }
 
-/*back button*/
-#section1 {
-  justify-content: center;
-  align-items: center;
-  margin-bottom: 15px;
-  text-align: center;
-  outline: none;
-  border: none;
-}
-
-.back {
-  margin: 4px 4px;
-  padding: 5px 5px;
-  font-size: 16px;
-  color: black;
-  border: none;
-  background-color: transparent;
-  cursor: pointer;
-  display: flex;
-  justify-content: flex-start;
-}
-
-.back:hover {
-  color: red;
-}
-
 /*body base*/
 .section2 {
-  margin-bottom: 10px;
+  margin-bottom: 30px;
 }
 
 #column {
@@ -161,6 +135,11 @@ legend {
 .vl {
   border-left: 3px solid #d2d9dd;
   height: 500px;
+}
+
+.vl2 {
+  border-left: 3px solid #d2d9dd;
+  height: 70px;
 }
 
 .arror-btn{

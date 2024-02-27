@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 from flask import Flask, render_template, request, redirect, url_for, session, jsonify
+=======
+from flask import Flask, render_template, request, redirect, url_for, session, flash
+>>>>>>> 0742e54b62dda42b5d2ec590632c802899fc1fe8
 from flask_sqlalchemy import SQLAlchemy
 from enum import Enum as PyEnum
 from werkzeug.security import generate_password_hash, check_password_hash
@@ -11,8 +15,7 @@ app = Flask(__name__)
 
 #chawin only dont change!!
 #app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:////Users/chs/Desktop/flaskproject21/python-try/Components/instance/carvis.db'
-
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///carvis.db'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:////Users\Verty\Documents\python try\Components\instance\carvis.db'
 db = SQLAlchemy(app)
 app.secret_key = 'eb3d197e1633fd5193f89ff8b2887923d12645b647a97893'
 
@@ -22,7 +25,6 @@ class UserLevels(PyEnum):
     SALESPERSON = 'Salesperson'
     SUPERADMIN = 'Superadmin'
 
-
 class User(db.Model):
     user_id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(50), unique=True, nullable=False)
@@ -30,14 +32,12 @@ class User(db.Model):
     user_level = db.Column(db.Enum(UserLevels), nullable=False)
     personal_info = db.relationship('PersonalInformation', backref='user', uselist=False)
 
-
 class PersonalInformation(db.Model):
-    user_id = db.Column(db.Integer, db.ForeignKey('user.user_id'), primary_key=True)
+    user_id = db.Column(db.Integer, db.ForeignKey('user.user_id', ondelete='CASCADE'), primary_key=True)
     full_name = db.Column(db.String(100))
     email = db.Column(db.String(100))
     phone_number = db.Column(db.String(20))
     address = db.Column(db.Text)
-
 
 class CarModel(db.Model):
     model_id = db.Column(db.Integer, primary_key=True)
@@ -54,48 +54,48 @@ class CarModel(db.Model):
     safety_features = db.Column(db.Text)  
     additional_details = db.Column(db.Text) 
 
-
 class Order(db.Model):
     order_id = db.Column(db.Integer, primary_key=True)
-    user_id = db.Column(db.Integer, db.ForeignKey('user.user_id'))
-    model_id = db.Column(db.Integer, db.ForeignKey('car_model.model_id'))
+    user_id = db.Column(db.Integer, db.ForeignKey('user.user_id', ondelete='CASCADE'))
+    model_id = db.Column(db.Integer, db.ForeignKey('car_model.model_id', ondelete='CASCADE'))
+    ad_id = db.Column(db.Integer, db.ForeignKey('advertisement.ad_id', ondelete='CASCADE'))
     order_date = db.Column(db.Date)
     total_price = db.Column(db.Numeric(10, 2))
-
+    negotiated_price = db.Column(db.Numeric(10, 2))
+    name = db.Column(db.String(100))  
+    email = db.Column(db.String(100))  
+    country = db.Column(db.String(50))  
+    
 
 class SalesHistory(db.Model):
     sale_id = db.Column(db.Integer, primary_key=True)
-    salesperson_id = db.Column(db.Integer, db.ForeignKey('user.user_id'))
-    buyer_id = db.Column(db.Integer, db.ForeignKey('user.user_id'))
-    model_id = db.Column(db.Integer, db.ForeignKey('car_model.model_id'))
+    salesperson_id = db.Column(db.Integer, db.ForeignKey('user.user_id', ondelete='CASCADE'))
+    buyer_id = db.Column(db.Integer, db.ForeignKey('user.user_id', ondelete='CASCADE'))
+    model_id = db.Column(db.Integer, db.ForeignKey('car_model.model_id', ondelete='CASCADE'))
     sale_date = db.Column(db.Date)
     total_price = db.Column(db.Numeric(10, 2))
 
-
 class Advertisement(db.Model):
     ad_id = db.Column(db.Integer, primary_key=True)
-    model_id = db.Column(db.Integer, db.ForeignKey('car_model.model_id'))
+    model_id = db.Column(db.Integer, db.ForeignKey('car_model.model_id', ondelete='CASCADE'))
     ad_title = db.Column(db.String(255))
     ad_description = db.Column(db.Text)
     ad_expiry_date = db.Column(db.Date)
     is_new = db.Column(db.Boolean)
 
-
 class Salesperson(db.Model):
-    salesperson_id = db.Column(db.Integer, primary_key=True)
-    user_id = db.Column(db.Integer, db.ForeignKey('user.user_id'))
+    salesperson_id = db.Column(db.Integer, db.ForeignKey('user.user_id', ondelete='CASCADE'), primary_key=True)
+    user_id = db.Column(db.Integer, db.ForeignKey('user.user_id', ondelete='CASCADE'))
     commission_rate = db.Column(db.Numeric(5, 2))
 
-
 class Superadmin(db.Model):
-    superadmin_id = db.Column(db.Integer, primary_key=True)
-    user_id = db.Column(db.Integer, db.ForeignKey('user.user_id'))
-
+    superadmin_id = db.Column(db.Integer, db.ForeignKey('user.user_id', ondelete='CASCADE'), primary_key=True)
+    user_id = db.Column(db.Integer, db.ForeignKey('user.user_id', ondelete='CASCADE'))
 
 class SalespersonCarModel(db.Model):
     salesperson_car_id = db.Column(db.Integer, primary_key=True)
-    salesperson_id = db.Column(db.Integer, db.ForeignKey('user.user_id'))
-    model_id = db.Column(db.Integer, db.ForeignKey('car_model.model_id'))
+    salesperson_id = db.Column(db.Integer, db.ForeignKey('salesperson.salesperson_id', ondelete='CASCADE'))
+    model_id = db.Column(db.Integer, db.ForeignKey('car_model.model_id', ondelete='CASCADE'))
 
 
 @app.route('/create_account')
@@ -199,7 +199,7 @@ def show_admin_dashboard_form():
                 return render_template('admin_dashboard2.html', user_name=current_user.username, users=user_list, no_users=True)
         else:
             return render_template("forbidden.html"), 403
-    return render_template('user_login.html')
+    return render_template('login.html')
 
 
 @app.route('/deleteuser/<string:username>')
@@ -241,29 +241,72 @@ def homepage():
     else:
         return render_template('user_login.html')
 
-@app.route('/ad/<int:ad_id>')
-def ad_detail(ad_id):
-    advertisement = Advertisement.query.get_or_404(ad_id)
-    car_model = CarModel.query.get(advertisement.model_id)
-    return render_template('ad_detail.html', advertisement=advertisement, car_model=car_model)
 
-#@app.route('/car-images')
-    #def car_images():
-    # Fetch all car model image URLs as a list of strings
-    #  car_images = [url for (url,) in CarModel.query.with_entities(CarModel.image_url).all()]
-   # return render_template('car_images.html', car_images=car_images)
+
+@app.route('/ad/<int:ad_id>', methods=['GET', 'POST'])
+def ad_detail(ad_id):
+    if 'username' in session:
+        current_user = User.query.filter_by(username=session["username"]).first()
+        if current_user and current_user.user_level == UserLevels.BUYER_SELLER:
+            advertisement = Advertisement.query.get_or_404(ad_id)
+            car_model = CarModel.query.get_or_404(advertisement.model_id)
+
+            if request.method == 'POST':
+                name = request.form['name']
+                email = request.form['email']
+                country = request.form['country']
+                bank_account = float(request.form.get('bank_account', 0))
+                
+                # Determine the price to check against the bank account
+                asking_price = float(car_model.price)
+                negotiated_price = None  # Default value
+                
+                if not advertisement.is_new:
+                    negotiated_price = float(request.form.get('negotiation_price', 0) or 0)
+                    price_to_check = negotiated_price if negotiated_price else asking_price
+                else:
+                    price_to_check = asking_price
+                
+                # Check if the bank account covers the price
+                if bank_account < price_to_check:
+                    flash("Insufficient funds in the bank account for this purchase.", "error")
+                else:
+                    # Only create and save the order if there are no errors
+                    new_order = Order(
+                        user_id=current_user.user_id,
+                        model_id=car_model.model_id,
+                        ad_id=advertisement.ad_id,
+                        order_date=datetime.utcnow(),
+                        total_price=asking_price,
+                        negotiated_price=negotiated_price,
+                        name=name,
+                        email=email,
+                        country=country
+                    )
+                    db.session.add(new_order)
+                    db.session.commit()
+                    flash("Order successfully created!", "success")
+
+            fuel_type_details = car_model.fuel_type.split(",") if car_model.fuel_type else []
+            return render_template(
+                'ad_detail.html',
+                advertisement=advertisement,
+                car_model=car_model,
+                fuel_type_details=fuel_type_details
+            )
+    else:
+        flash('You must be logged in as a buyer or seller to view this page.')
+        return redirect(url_for('user_login'))
+    
+
 
 @app.route('/agentdashboard')
 def agentdashboard():
     return render_template('agentDisplay.html')
 
-@app.route('/sellerdashboard')
-def sellerdashboard():
-    return render_template('sellerDisplay.html')
-
-@app.route('/buyerdashboard')
-def buyerdashboard():
-    return render_template('buyerDisplay.html')
+@app.route('/account')
+def account():
+    return render_template('account.html')
 
 @app.route('/superadmindashboard')
 def superadmindashboard():
@@ -299,6 +342,8 @@ def aboutus():
 
 
 if __name__ == '__main__':
+    with app.app_context():
+        db.create_all()
     app.run(debug=True)
 
 
