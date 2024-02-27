@@ -243,7 +243,7 @@ def ad_detail(ad_id):
                 
                 # Check if the bank account covers the price
                 if bank_account < price_to_check:
-                    flash("Insufficient funds in the bank account for this purchase.")
+                    flash("Insufficient funds in the bank account for this purchase.", "error")
                 else:
                     # Only create and save the order if there are no errors
                     new_order = Order(
@@ -259,7 +259,7 @@ def ad_detail(ad_id):
                     )
                     db.session.add(new_order)
                     db.session.commit()
-                    flash("Order successfully created!")
+                    flash("Order successfully created!", "success")
 
             fuel_type_details = car_model.fuel_type.split(",") if car_model.fuel_type else []
             return render_template(

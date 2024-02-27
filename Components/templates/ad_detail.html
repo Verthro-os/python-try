@@ -54,15 +54,16 @@
                     {% if not advertisement.is_new %}
                     <input type="number" name="negotiation_price" placeholder="New Negotiation Price" required min="0" step="any">
                     {% endif %}
-                    {% with messages = get_flashed_messages() %}
+                    {% with messages = get_flashed_messages(with_categories=true) %}
                         {% if messages %}
-                           <div id="error-message" class="alert" tabindex="1">
-                            {% for message in messages %}
-                              <p>{{ message }} <a href="#!" class="close">&times;</a></p>
+                            {% for category, message in messages %}
+                                 <div class="flash-message {{ category }}">
+                                 {{ message }}
+                                 </div>
                             {% endfor %}
-                          </div>
                         {% endif %}
                     {% endwith %}
+
                     <button type="submit">Create Buy Request</button>
                 </form>
             </div>

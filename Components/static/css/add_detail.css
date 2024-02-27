@@ -122,34 +122,19 @@ html, body {
     background: #555;
 }
 
-.error-messages p {
-    color: red; /* Error message in red */
-    margin-bottom: 10px; /* Space between messages */
-}
-
-.alert {
+.flash-message {
     padding: 10px;
+    margin-bottom: 15px;
+    border-radius: 5px;
+    color: #fff;
+}
+
+.flash-message.success {
+    background-color: #4CAF50; /* Green for success messages */
+}
+
+.flash-message.error {
     background-color: #f44336; /* Red for error messages */
-    color: white;
-    margin-bottom: 10px;
-    position: relative; /* So that the close button can be absolutely positioned */
-}
-
-.alert .close {
-    position: absolute;
-    right: 10px;
-    top: 0;
-    bottom: 0;
-    height: 10px;
-    margin: auto 0;
-    font-size: 10px;
-    text-decoration: none;
-    color: white;
-}
-
-.alert:focus {
-    outline: none; /* Removes the outline when the alert is focused */
-    display: none; /* Hides the alert */
 }
 
 input::-webkit-outer-spin-button,
