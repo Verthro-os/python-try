@@ -58,9 +58,9 @@ class Order(db.Model):
     order_date = db.Column(db.Date)
     total_price = db.Column(db.Numeric(10, 2))
     negotiated_price = db.Column(db.Numeric(10, 2))
-    name = db.Column(db.String(100))  # Assuming name can be up to 100 characters
-    email = db.Column(db.String(100))  # Assuming email can be up to 100 characters
-    country = db.Column(db.String(50))  # Assuming country can be up to 50 characters
+    name = db.Column(db.String(100))  
+    email = db.Column(db.String(100))  
+    country = db.Column(db.String(50))  
     
 
 class SalesHistory(db.Model):
@@ -224,41 +224,49 @@ def ad_detail(ad_id):
         if current_user and current_user.user_level == UserLevels.BUYER_SELLER:
             advertisement = Advertisement.query.get_or_404(ad_id)
             car_model = CarModel.query.get_or_404(advertisement.model_id)
-            error = None
 
             if request.method == 'POST':
                 name = request.form['name']
                 email = request.form['email']
                 country = request.form['country']
-                bank_account = float(request.form.get('bank_account', 0))  # Now always retrieved
+                bank_account = float(request.form.get('bank_account', 0))
                 
+                # Determine the price to check against the bank account
                 asking_price = float(car_model.price)
+                negotiated_price = None  # Default value
                 
-                # Default price_to_check to asking_price
-                price_to_check = asking_price
-
-                # Only used cars might have a negotiation price
                 if not advertisement.is_new:
-                    negotiation_price = float(request.form.get('negotiation_price', 0))
-                    if negotiation_price:
-                        price_to_check = negotiation_price
-
-                # Check if bank account covers the price_to_check
-                if bank_account < price_to_check:
-                    error = "Insufficient funds in the bank account for this purchase."
-                    flash(error)
+                    negotiated_price = float(request.form.get('negotiation_price', 0) or 0)
+                    price_to_check = negotiated_price if negotiated_price else asking_price
                 else:
-                    # Proceed with creating the buy request
-                    # Save to database or perform other actions
-                    pass
+                    price_to_check = asking_price
+                
+                # Check if the bank account covers the price
+                if bank_account < price_to_check:
+                    flash("Insufficient funds in the bank account for this purchase.")
+                else:
+                    # Only create and save the order if there are no errors
+                    new_order = Order(
+                        user_id=current_user.user_id,
+                        model_id=car_model.model_id,
+                        ad_id=advertisement.ad_id,
+                        order_date=datetime.utcnow(),
+                        total_price=asking_price,
+                        negotiated_price=negotiated_price,
+                        name=name,
+                        email=email,
+                        country=country
+                    )
+                    db.session.add(new_order)
+                    db.session.commit()
+                    flash("Order successfully created!")
 
             fuel_type_details = car_model.fuel_type.split(",") if car_model.fuel_type else []
             return render_template(
                 'ad_detail.html',
                 advertisement=advertisement,
                 car_model=car_model,
-                fuel_type_details=fuel_type_details,
-                error=error
+                fuel_type_details=fuel_type_details
             )
     else:
         flash('You must be logged in as a buyer or seller to view this page.')
