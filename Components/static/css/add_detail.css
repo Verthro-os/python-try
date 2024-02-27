@@ -1,0 +1,177 @@
+/* General styles */
+body {
+    font-family: 'Arial', sans-serif;
+    line-height: 1.6;
+    color: #333;
+    background-color: #f4f4f4;
+    margin: 0;
+    padding: 0;
+}
+
+html, body {
+    height: 100%; /* This ensures that the html and body take up at least the height of the browser window */
+    overflow-y: auto; /* This allows vertical scrolling if the content overflows */
+}
+.ad-detail-container {
+    min-height: 100vh; /* Minimum height of the viewport */
+    width: 85%;
+    max-width: 1200px;
+    margin: 20px auto;
+    padding: 20px;
+    background: #fff;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    overflow-y: auto; /* Allow vertical scrolling within the container if needed */
+}
+
+.ad-heading {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.ad-detail-grid {
+    display: flex; /* Use flexbox to create a row */
+    justify-content: space-between; /* This will put space between the two child elements */
+    align-items: start; /* Aligns items to the start of the container */
+}
+
+.car-images {
+    display: flex; /* Aligns children images in a row */
+    justify-content: center; /* Centers images in the container */
+    align-items: center; /* Align images in the middle along the cross axis */
+    gap: 10px; /* Puts space between images */
+    margin-bottom: 20px; /* Adds some space below the image container */
+}
+
+.car-images img {
+    max-height: 200px; /* Adjust the max-height as needed */
+    width: auto; /* Scales the width automatically to maintain aspect ratio */
+    object-fit: cover; /* Ensures the images cover the area without stretching */
+    flex-shrink: 0; /* Prevents the images from shrinking if there isn't enough space */
+}
+/* Styling for car details */
+.car-info {
+    border-right: 1px solid #ddd;
+    padding-right: 20px;
+    margin-bottom: 15px;
+    flex-grow: 2; /* car-info will take up twice as much width as car-buy-request */
+    margin-right: 20px;
+}
+
+.car-info h2 {
+    font-size: 1.7em; /* Larger font size for headings */
+    margin-top: 0.5em; /* Smaller top margin for tighter spacing */
+    margin-bottom: 0.5em; /* Smaller bottom margin for tighter spacing */
+}
+
+.car-info p {
+    font-size: 1.1em; /* Larger font size for paragraph text */
+    margin-bottom: 0em; /* Reduced bottom margin for tighter spacing */
+    line-height: 1em; /* Adjust line height for better readability if needed */
+}
+
+/* Pricing section */
+.pricing {
+    font-size: 1.2em;
+    color: #008000; /* Green color for price */
+    font-weight: bold;
+    font-size: 1.5em; /* Adjust if you want the pricing to be even larger */
+    margin-bottom: 0.5em; /* Smaller bottom margin for tighter spacing */
+
+}
+
+/* Buy Request form styling */
+.car-buy-request {
+    background: #f9f9f9;
+    padding: 20px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    justify-self: end; /* This will align the buy request to the end of the grid column */
+    flex-grow: 1; /* car-buy-request will take the space it needs based on its content */
+    max-width: 350px; /* Optional: if you want to limit its width */
+}
+
+
+.car-buy-request h2 {
+    color: #555;
+    margin-top: 0;
+}
+
+.car-buy-request form {
+    display: flex;
+    flex-direction: column;
+}
+
+.car-buy-request input {
+    margin-bottom: 10px;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+}
+
+.car-buy-request button {
+    background: #333;
+    color: #fff;
+    padding: 10px 15px;
+    border: 0;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 1em;
+}
+
+.car-buy-request button:hover {
+    background: #555;
+}
+
+.error-messages p {
+    color: red; /* Error message in red */
+    margin-bottom: 10px; /* Space between messages */
+}
+
+.alert {
+    padding: 10px;
+    background-color: #f44336; /* Red for error messages */
+    color: white;
+    margin-bottom: 10px;
+    position: relative; /* So that the close button can be absolutely positioned */
+}
+
+.alert .close {
+    position: absolute;
+    right: 10px;
+    top: 0;
+    bottom: 0;
+    height: 10px;
+    margin: auto 0;
+    font-size: 10px;
+    text-decoration: none;
+    color: white;
+}
+
+.alert:focus {
+    outline: none; /* Removes the outline when the alert is focused */
+    display: none; /* Hides the alert */
+}
+
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+/* For Firefox */
+input[type=number] {
+-moz-appearance: textfield;
+    appearance: textfield;
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+    .ad-detail-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .car-info {
+        border-right: none;
+        padding-right: 0;
+    }
+}

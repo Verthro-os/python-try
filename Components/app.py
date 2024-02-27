@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, redirect, url_for, session
+from flask import Flask, render_template, request, redirect, url_for, session, flash
 from flask_sqlalchemy import SQLAlchemy
 from enum import Enum as PyEnum
 from werkzeug.security import generate_password_hash, check_password_hash
@@ -11,8 +11,7 @@ app = Flask(__name__)
 
 #chawin only dont change!!
 #app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:////Users/chs/Desktop/flaskproject21/python-try/Components/instance/carvis.db'
-
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///carvis.db'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:////Users\Verty\Documents\python try\Components\instance\carvis.db'
 db = SQLAlchemy(app)
 app.secret_key = 'eb3d197e1633fd5193f89ff8b2887923d12645b647a97893'
 
@@ -55,8 +54,14 @@ class Order(db.Model):
     order_id = db.Column(db.Integer, primary_key=True)
     user_id = db.Column(db.Integer, db.ForeignKey('user.user_id', ondelete='CASCADE'))
     model_id = db.Column(db.Integer, db.ForeignKey('car_model.model_id', ondelete='CASCADE'))
+    ad_id = db.Column(db.Integer, db.ForeignKey('advertisement.ad_id', ondelete='CASCADE'))
     order_date = db.Column(db.Date)
     total_price = db.Column(db.Numeric(10, 2))
+    negotiated_price = db.Column(db.Numeric(10, 2))
+    name = db.Column(db.String(100))  # Assuming name can be up to 100 characters
+    email = db.Column(db.String(100))  # Assuming email can be up to 100 characters
+    country = db.Column(db.String(50))  # Assuming country can be up to 50 characters
+    
 
 class SalesHistory(db.Model):
     sale_id = db.Column(db.Integer, primary_key=True)
@@ -187,7 +192,7 @@ def show_admin_dashboard_form():
             return render_template('admin_dashboard2.html', user_name=current_user.username, users=user_list) #Just testing
         else:
             return render_template("forbidden.html"), 403
-    return render_template('user_login.html')
+    return render_template('login.html')
 
 
 @app.route('/homepage', methods=['GET', 'POST'])
@@ -211,43 +216,55 @@ def homepage():
         return render_template('user_login.html')
 
 
+
 @app.route('/ad/<int:ad_id>', methods=['GET', 'POST'])
 def ad_detail(ad_id):
-    advertisement = Advertisement.query.get_or_404(ad_id)
-    car_model = CarModel.query.get_or_404(advertisement.model_id)
-    error = None
+    if 'username' in session:
+        current_user = User.query.filter_by(username=session["username"]).first()
+        if current_user and current_user.user_level == UserLevels.BUYER_SELLER:
+            advertisement = Advertisement.query.get_or_404(ad_id)
+            car_model = CarModel.query.get_or_404(advertisement.model_id)
+            error = None
 
-    if request.method == 'POST':
-        name = request.form['name']
-        email = request.form['email']
-        country = request.form['country']
-        bank_account = float(request.form['bank_account'])
-        negotiation_price = float(request.form.get('negotiation_price', 0))
+            if request.method == 'POST':
+                name = request.form['name']
+                email = request.form['email']
+                country = request.form['country']
+                bank_account = float(request.form.get('bank_account', 0))  # Now always retrieved
+                
+                asking_price = float(car_model.price)
+                
+                # Default price_to_check to asking_price
+                price_to_check = asking_price
 
-        asking_price = float(car_model.price)
-        price_to_check = negotiation_price if negotiation_price else asking_price
+                # Only used cars might have a negotiation price
+                if not advertisement.is_new:
+                    negotiation_price = float(request.form.get('negotiation_price', 0))
+                    if negotiation_price:
+                        price_to_check = negotiation_price
 
-        if bank_account < price_to_check:
-            error = "Insufficient funds in the bank account for this purchase."
-        else:
-            # Proceed with creating the buy request
-            # Save to database or perform other actions
-            pass
+                # Check if bank account covers the price_to_check
+                if bank_account < price_to_check:
+                    error = "Insufficient funds in the bank account for this purchase."
+                    flash(error)
+                else:
+                    # Proceed with creating the buy request
+                    # Save to database or perform other actions
+                    pass
 
-    fuel_economy_details = car_model.fuel_economy.split(",") if car_model.fuel_economy else []
-    return render_template(
-        'ad_detail.html',
-        advertisement=advertisement,
-        car_model=car_model,
-        fuel_economy_details=fuel_economy_details,
-        error=error
-    )
+            fuel_type_details = car_model.fuel_type.split(",") if car_model.fuel_type else []
+            return render_template(
+                'ad_detail.html',
+                advertisement=advertisement,
+                car_model=car_model,
+                fuel_type_details=fuel_type_details,
+                error=error
+            )
+    else:
+        flash('You must be logged in as a buyer or seller to view this page.')
+        return redirect(url_for('user_login'))
+    
 
-#@app.route('/car-images')
-    #def car_images():
-    # Fetch all car model image URLs as a list of strings
-    #  car_images = [url for (url,) in CarModel.query.with_entities(CarModel.image_url).all()]
-   # return render_template('car_images.html', car_images=car_images)
 
 @app.route('/agentdashboard')
 def agentdashboard():
@@ -286,6 +303,8 @@ def aboutus():
     return render_template('aboutus.html')
 
 if __name__ == '__main__':
+    with app.app_context():
+        db.create_all()
     app.run(debug=True)
 
 

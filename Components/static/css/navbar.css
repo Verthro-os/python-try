@@ -48,3 +48,30 @@ body, h1, h2, ul {
     text-decoration: none;
     font-size: 14px;
 }
+
+body, html {
+    height: 100%;
+    margin: 0;
+}
+
+.site-container {
+    display: flex;
+    flex-direction: column;
+    min-height: 100%;
+}
+
+.content {
+    flex: 1;
+}
+
+footer {
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    width: 100%;
+    background: #191919;
+    color: #fff;
+    padding-top: 5px;
+    padding-bottom: 5px;
+    z-index: 1;
+}
