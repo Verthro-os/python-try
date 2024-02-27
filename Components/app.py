@@ -84,15 +84,25 @@ class Salesperson(db.Model):
     user_id = db.Column(db.Integer, db.ForeignKey('user.user_id', ondelete='CASCADE'))
     commission_rate = db.Column(db.Numeric(5, 2))
 
-class Superadmin(db.Model):
-    superadmin_id = db.Column(db.Integer, db.ForeignKey('user.user_id', ondelete='CASCADE'), primary_key=True)
-    user_id = db.Column(db.Integer, db.ForeignKey('user.user_id', ondelete='CASCADE'))
-
-class SalespersonCarModel(db.Model):
-    salesperson_car_id = db.Column(db.Integer, primary_key=True)
-    salesperson_id = db.Column(db.Integer, db.ForeignKey('salesperson.salesperson_id', ondelete='CASCADE'))
-    model_id = db.Column(db.Integer, db.ForeignKey('car_model.model_id', ondelete='CASCADE'))
-
+@app.route('/delete')
+def delete_user():
+    user_id = 3  # This should be dynamically set, not hard-coded
+    user_to_delete = User.query.get(user_id)
+    
+    # Check if the user actually exists
+    if user_to_delete:
+        # If there's a user, delete related records first
+        PersonalInformation.query.filter_by(user_id=user_id).delete()
+        Advertisement.query.filter_by(model_id=user_id).delete()  # Assuming this should be deleted by user_id
+        Salesperson.query.filter_by(salesperson_id=user_id).delete()
+        
+        # Now delete the user
+        db.session.delete(user_to_delete)
+        db.session.commit()
+        return "User deleted"
+    else:
+        # If no user was found, return a different message
+        return "No user found with the provided ID"
 
 @app.route('/create_account')
 def show_create_account_form():
