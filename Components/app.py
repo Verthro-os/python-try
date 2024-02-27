@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, redirect, url_for, session, flash
+from flask import Flask, render_template, request, redirect, url_for, session, flash, jsonify
 from flask_sqlalchemy import SQLAlchemy
 from enum import Enum as PyEnum
 from werkzeug.security import generate_password_hash, check_password_hash
@@ -11,7 +11,8 @@ app = Flask(__name__)
 
 #chawin only dont change!!
 #app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:////Users/chs/Desktop/flaskproject21/python-try/Components/instance/carvis.db'
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:////Users\Verty\Documents\python try\Components\instance\carvis.db'
+#app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:////Users\Verty\Documents\python try\Components\instance\carvis.db' #Mickey Test
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///carvis.db'
 db = SQLAlchemy(app)
 app.secret_key = 'eb3d197e1633fd5193f89ff8b2887923d12645b647a97893'
 
@@ -190,20 +191,42 @@ def show_dashboard_form():
 def show_admin_dashboard_form():
     if 'username' in session:
         current_user = User.query.filter_by(username=session["username"]).first()
+
         if current_user.user_level.name == "SUPERADMIN":
             user_list = []
             users = User.query.all()
+
             for user in users:
                 user_info = PersonalInformation.query.filter_by(user_id=user.user_id).first()
-                user_list.append({"username" : user.username ,"email" : user_info.email})
-
-            print(user_list[0])
-
-            return render_template('admin_dashboard2.html', user_name=current_user.username, users=user_list) #Just testing
+                if user.user_level.name == "SALESPERSON":
+                    user_list.append({"username" : user.username ,"email" : user_info.email})
+            if len(user_list) > 0:
+                return render_template('admin_dashboard2.html', user_name=current_user.username, users=user_list) #Just testing
+            else:
+                return render_template('admin_dashboard2.html', user_name=current_user.username, users=user_list, no_users=True)
         else:
             return render_template("forbidden.html"), 403
     return render_template('login.html')
 
+
+@app.route('/deleteuser/<string:username>')
+def delete_user(username):
+
+    if 'username' in session:
+        current_user = User.query.filter_by(username=session["username"]).first()
+        if current_user.user_level.name == "SUPERADMIN":
+            del_user = User.query.filter_by(username=username).first()
+            print("USERID -> " +  str(del_user.user_id))
+
+            PersonalInformation.query.filter_by(user_id=del_user.user_id).delete()
+            Advertisement.query.filter_by(model_id=del_user.user_id).delete()
+            Salesperson.query.filter_by(salesperson_id=del_user.user_id).delete()
+
+            db.session.delete(del_user)
+            db.session.commit()
+
+            return show_admin_dashboard_form()
+    return render_template("forbidden.html"), 403
 
 @app.route('/homepage', methods=['GET', 'POST'])
 def homepage():
@@ -319,6 +342,11 @@ def askconfirm():
 @app.route('/aboutus')
 def aboutus():
     return render_template('aboutus.html')
+
+#with app.app_context():  #Just on Inital RUN
+
+#    db.create_all()
+
 
 if __name__ == '__main__':
     with app.app_context():
