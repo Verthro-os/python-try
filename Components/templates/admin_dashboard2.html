@@ -58,6 +58,10 @@
             transition: background-color 0.3s ease;
         }
 
+         .center {
+            text-align: center;
+        }
+
         button:hover {
             background-color: #0056b3;
         }
@@ -66,6 +70,9 @@
 <body>
     <div class="container">
         <h1>User List</h1>
+         {% if no_users %}
+        <p class="center">No users</p>
+        {% else %}
         <table>
             <thead>
                 <tr>
@@ -80,12 +87,13 @@
                     <td>{{ user.username }}</td>
                     <td>{{ user.email }}</td>
                     <td class="button-container">
-                        <button onclick="alert('Button clicked for {{ user.username }}')">Click Me</button>
+                        <button><a href="/deleteuser/{{ user.username }}">Delete</a></button>
                     </td>
                 </tr>
                 {% endfor %}
             </tbody>
         </table>
+        {% endif %}
     </div>
 </body>
 </html>
