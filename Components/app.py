@@ -333,7 +333,8 @@ def ad_detail(ad_id):
                         negotiated_price=negotiated_price,
                         name=name,
                         email=email,
-                        country=country
+                        country=country,
+                        order_status=1
                     )
                     db.session.add(new_order)
                     db.session.commit()
