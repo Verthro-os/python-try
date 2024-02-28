@@ -160,7 +160,7 @@ def login():
         if existing_user.user_level == UserLevels.BUYER_SELLER:
             return redirect(url_for('homepage'))
         elif existing_user.user_level == UserLevels.SUPERADMIN:
-            return redirect(url_for('show_admin_dashboard_form'))
+            return redirect(url_for('homepage'))
         else:
             return redirect(url_for('show_dashboard_form'))
     
