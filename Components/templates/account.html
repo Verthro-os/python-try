@@ -1,3 +1,8 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Carvis</title>
+    
 <link rel="stylesheet" href="{{ url_for('static', filename='css/style_sb.css') }}">
 
 <body>
@@ -24,7 +29,7 @@
                                 <input type="text" id="address" name="address" value="{{ personal_info.address }}" placeholder="Address" required>
                                 
                                 <!-- Removed password input for security -->
-                            </fieldset>>
+                            </fieldset>
                             <a href="{{ url_for('changepassword') }}" class="button1">Change Password</a>
                             <button type="submit" class="button2">Upload Changes</button>
                         </form>
@@ -35,12 +40,41 @@
     
                 <div class="container">
                     <div class="container-sub">
-                        <br><br><br><h2>Your Order History</h2><br>
-                        <button class="button1" role="button">Car Name | Used <span class="arror-btn">></span></button>
+                        <div class="order-history">
+                            <h8>Order History</h8>
+                            <div class="table-container">
+                                <table>
+                                    <thead>
+                                        <tr>
+                                            <th>Advertisement</th>
+                                            <th>Car Name</th>
+                                            <th>Date</th>
+                                            <th>Email</th>
+                                            <th>Country</th>
+                                            <th>List Price</th>
+                                            <th>Negotiated Price</th>
+                                            <th>Status</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {% for order in orders %}
+                                        <tr>
+                                            <td>{{ order.advertisement.ad_title }}</td>
+                                            <td>{{ order.car_model.make }} {{ order.car_model.model }}</td>
+                                            <td>{{ order.order_date.strftime('%Y-%m-%d') }}</td>
+                                            <td>{{ order.email }}</td>
+                                            <td>{{ order.country }}</td>
+                                            <td>{{ order.total_price }}</td>
+                                            <td>{{ order.negotiated_price }}</td>
+                                            <td>{{ 'Pending' if order.order_status == 1 else 'Accepted' if order.order_status == 2 else 'Rejected' }}</td>
+                                        </tr>
+                                        {% endfor %}
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
     
-                        <h2>Your Previous Offer</h2><br />
-                        <button class="button1" role="button">Car Name | Date of Offer <span
-                                class="arror-btn">></span></button>
+                        
                     </div>
                 </div>
     
@@ -110,6 +144,10 @@
             </div>
         </div>
         </div>
+
 </main>
-</body>
 {% endblock %}
+</body>
+</html>
+
+```
