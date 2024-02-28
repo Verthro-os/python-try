@@ -8,22 +8,17 @@
 </head>
 <body>
     {% extends "navbar.html" %}
-    {% block content %}
-    <main>
-        <section class="hero">
-            <div class="wrapper">
-                <h2 style="font-size:60px">START BEFORE YOU ARE READY </h2>
+    <div class="flex-container">
+        {% block content %}
+            <section class="hero">
+            <img src="{{ url_for('static', filename='img/banner2.jpg') }}" alt="CARVIS Banner" class="hero-image">
+            <div class="banner-text">
+                <h2>START BEFORE YOU ARE READY</h2>
                 <h1>CARVIS</h1>
             </div>
-        </section>
-        <section class="subset"></section>
-
-        <section class="subset2"></section>
-
-        <section class="subset1"></section>
-
-        <section class="gallery">
-            <div class="wrapper">
+            </section>
+            <section class="gallery">
+            <div class="wrapper-main">
                 
                 <h2>Browse Gallery</h2>
                 <div class="car-listings">
@@ -42,8 +37,9 @@
                     {% endfor %}
                 </div>
             </div>
-        </section>
-    </main>
+            </section>
+        {% endblock %}
+    </div>
 </body>
-{% endblock %}
+
 </html> 

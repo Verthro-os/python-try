@@ -11,8 +11,8 @@ app = Flask(__name__)
 
 #chawin only dont change!!
 #app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:////Users/chs/Desktop/flaskproject21/python-try/Components/instance/carvis.db'
-#app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:////Users\Verty\Documents\python try\Components\instance\carvis.db' #Mickey Test
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///carvis.db'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:////Users\Verty\Documents\python try\Components\instance\carvis.db' #Mickey Test
+#app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///carvis.db'
 db = SQLAlchemy(app)
 app.secret_key = 'eb3d197e1633fd5193f89ff8b2887923d12645b647a97893'
 
@@ -85,14 +85,6 @@ class Salesperson(db.Model):
     user_id = db.Column(db.Integer, db.ForeignKey('user.user_id', ondelete='CASCADE'))
     commission_rate = db.Column(db.Numeric(5, 2))
 
-class Superadmin(db.Model):
-    superadmin_id = db.Column(db.Integer, db.ForeignKey('user.user_id', ondelete='CASCADE'), primary_key=True)
-    user_id = db.Column(db.Integer, db.ForeignKey('user.user_id', ondelete='CASCADE'))
-
-class SalespersonCarModel(db.Model):
-    salesperson_car_id = db.Column(db.Integer, primary_key=True)
-    salesperson_id = db.Column(db.Integer, db.ForeignKey('salesperson.salesperson_id', ondelete='CASCADE'))
-    model_id = db.Column(db.Integer, db.ForeignKey('car_model.model_id', ondelete='CASCADE'))
 
 
 @app.route('/create_account')

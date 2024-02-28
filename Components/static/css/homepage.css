@@ -10,63 +10,79 @@ body {
     background-color: #e2e8f0;
     color: #333;
     line-height: 1.6;
+    display: flex; /* Set body to use flexbox */
+    flex-direction: column; /* Stack child elements vertically */
+    min-height: 100vh; /* Minimum height of viewport */
+}
+html {
+    height: 100%;
+    overflow-y: auto;
 }
 
-/* Wrapper styling */
-.wrapper {
-    width: 90%;
-    max-width: 1200px;
-    margin: auto;
+.flex-container {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh; /* This will take at least the full height of the viewport */
+}
+
+
+.wrapper{
+    flex-grow: 1;;
+    margin: none;
     overflow: hidden;
+    padding: 0;  
+}
+.wrapper-main {
+    flex-grow: 1; /* Allow this wrapper to grow and fill available space */
+    margin: 0; /* Center the wrapper */
+    overflow: auto; /* Clear floats if necessary */
+    
 }
 
 /* Hero section styling */
 .hero {
-    background-image: url('/static/img/banner2.jpg');
-    background-size: cover;
-    background-position: 100px -940px;
-    color: rgba(255, 255, 255, 0.4);
-    padding: 40px 0;
+    height: 10%; /* Adjust the height to something smaller than 100vh */
+    position: relative; /* Keep it relative if you want it to scroll with the page */
+    width: 100%;
+    margin-bottom: 0; /* Remove bottom margin */
+}
+
+/* Optional: If you want to adjust the size of the text inside the hero */
+.hero h1 {
+    font-size: 4rem; /* Adjust the size as needed */
+}
+
+.hero h2 {
+    font-size: 2rem; /* Adjust the size as needed */
+    text-decoration: none; /* Remove underline */
+}
+
+.hero-image {
+    width: 100%;
+    height: auto; /* Maintain aspect ratio */
+    display: block; /* Remove any default margin/padding */
+}
+
+.banner-text {
+    position: absolute;
+    top: 30%;
+    left: 50%;
+    transform: translate(-50%, -50%);
     text-align: center;
-    font-size: 60px; 
-    text-shadow: 2px 2px 4px rgba(0,0,0,0.5); 
-    
+    color: rgb(255, 255, 255); /* Adjust text color as needed */
 }
-.subset{
-    background-color: #1b1b1b;
-    padding: 4px;
-    margin-bottom: 2px;
-}
-
-.subset2{
-    background-color: #1b1b1b;
-    padding: 1px;
-    margin-bottom: 2px;
-}
-
-.subset1{
-    background-color: #1b1b1b;
-    padding: 0.5px;
-    margin-bottom: 2px;
-}
-
-/**/
-.section2 {
-    margin-bottom: 5px;
-    
-    
-  }
 
 /* Gallery section styling */
 .gallery {
-    padding: 40px 0;
+    padding-top: 20px; /* Adjust to reduce space between banner and gallery */
+    padding-bottom: 40px;
 }
 
 .gallery h2 {
     text-align: center;
-    margin-bottom: 40px;
+    margin-bottom: 20px; /* Adjust bottom margin of the title */
     font-size: 2rem; /* Larger heading */
-    text-decoration: underline;
+    text-decoration: none; /* Remove underline */
 }
 
 .car-listings {
@@ -87,7 +103,7 @@ body {
     transition: box-shadow 0.3s ease, transform 0.3s ease;
     text-align: center; /* Center text alignment */
     font-size: 1.1rem; /* Larger text */
-    text-decoration: solid;
+    text-decoration: none; /* Remove underline from links */
 }
 
 /* Apply the hover effect to the entire listing */
@@ -98,7 +114,7 @@ body {
 
 /* Image container */
 .card-image {
-    width: 100%; /* Set a fixed width or max-width here if necessary */
+    width: 100%;
     display: block;
     height: 200px; /* Fixed height for images */
     overflow: hidden; /* Hide overflow to maintain the aspect ratio */
@@ -115,38 +131,30 @@ body {
 .card-content {
     padding: 1rem;
     width: 100%; /* Match the width of the image */
-    transition: background-color 0.3s ease; /* Smooth transition for background color */
 }
 
 /* Condition-based background color */
 .card-content.new {
     background-color: #87b389; /* Green for new cars */
-    text-decoration: solid;
 }
 
 .card-content.used {
     background-color: #778ea1; /* Blue for used cars */
-    text-decoration: solid;
 }
 
 /* Text styling */
-.card-content h3 {
-    margin-top: 0.5rem;
-    margin-bottom: 0.5rem;
-    font-size: 1.5rem; /* Larger title */
-}
-
-.card-content p {
+.card-content h3, .card-content p {
     color: #1b1b1b;
+    text-decoration: none; /* Remove underline from all text in the card */
     margin: 0.5rem 0;
-    text-decoration: solid;
 }
 
 /* Ensure image containers are the same height */
 .card-image {
-    height: 200px; 
+    height: 200px;
 }
 
 .condition {
-    font-weight: bold; 
+    font-weight: bold;
+    text-decoration: none; /* Remove underline from condition text */
 }

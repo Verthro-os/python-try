@@ -1,35 +1,39 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
+<head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>CARVIS - Find Your Dream Car</title>
-    <link
-      rel="stylesheet"
-      href="{{ url_for('static', filename='css/navbar.css') }}"
-    />
-  </head>
-  <header class="site-header">
-    <div class="wrapper">
-      <div class="header-content">
-        <a href="/homepage" class="brand-logo">CARVIS</a>
-        <nav class="site-nav">
-          <ul>
-            <li><a href="/account">Account</a></li>
-            <li><a href="/aboutus">About</a></li>
-            <li><a href="/logout">Log Out</a></li>
-          </ul>
-        </nav>
-      </div>
-    </div>
-  </header>
-  {% block content %} {% endblock %}
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/navbar.css') }}" />
+</head>
+<body>
+    <header class="site-header">
+        <div class="wrapper header-content">
+            <a href="/homepage" class="brand-logo">CARVIS</a>
+            <nav class="site-nav">
+                <ul>
+                    <li><a href="/account">Account</a></li>
+                    <li><a href="/aboutus">About</a></li>
+                    <li><a href="/logout">Log Out</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
 
-  <footer style="background: #191919; z-index: 1; color: #fff; padding-top: 5px; padding-bottom: 5px; left: 0; bottom: 0; width: 100%;">
     <div class="wrapper">
-        <p>© 2024 CARVIS. All rights reserved.</p>
-        <p><a href="/privacy" style="color: #fff;">Privacy Policy</a> | <a href="/terms" style="color: #fff;">Terms of Service</a></p>
+        {% block content %}
+        <!-- The main content of your page will be insertedn here -->
+        {% endblock %}
     </div>
-</footer>
+
+    <footer>
+        <div class="wrapper-x">
+            <p>© 2024 CARVIS. All rights reserved.</p>
+            <!--<p>
+                <a href="/privacy" style="color: #fff;">Privacy Policy</a> |
+                <a href="/terms" style="color: #fff;">Terms of Service</a>
+            </p> --> 
+        </div>
+    </footer>
 </body>
 </html>
