@@ -5,10 +5,36 @@
     
 <link rel="stylesheet" href="{{ url_for('static', filename='css/style_sb.css') }}">
 
+
+<script>
+        // Function to remove flash messages after a certain time
+        setTimeout(function() {
+            var flashMessages = document.getElementById('flash-messages');
+            if (flashMessages) {
+                flashMessages.remove();
+                window.location.href = '/account';
+            }
+
+        }, 1800);
+    </script>
+
+
 <body>
     {% extends "navbar.html" %}
     {% block content %}
     <main>
+
+
+        {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            <div id="flash-messages">
+                {% for category, message in messages %}
+                    <p class="alert alert-{{ category }}">{{ message }}</p>
+                {% endfor %}
+            </div>
+        {% endif %}
+    {% endwith %}
+
     
         <div class="section2">
             <div id="column">

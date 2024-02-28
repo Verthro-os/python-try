@@ -1,4 +1,5 @@
 import os
+import time
 
 from flask import Flask, render_template, request, redirect, url_for, session, flash, jsonify, abort
 from flask_sqlalchemy import SQLAlchemy
@@ -279,7 +280,9 @@ def change_password():
                 hashed_password = generate_password_hash(new_password)
                 current_user.password = hashed_password
                 db.session.commit()
-                return redirect(url_for('homepage'))
+                flash('Password Changed', 'success')
+                return render_template('changePassword.html')
+                #return redirect(url_for('homepage'))
         else:
             return render_template('changePassword.html', error="Passwords dont match")
 
@@ -336,7 +339,7 @@ def add_car_advertisement():
     db.session.add(new_ad)
     db.session.commit()
 
-
+    flash('Your car has been added', 'success')
 
 
     return redirect(url_for('account'))
