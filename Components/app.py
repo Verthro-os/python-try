@@ -11,8 +11,8 @@ app = Flask(__name__)
 
 #chawin only dont change!!
 #app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:////Users/chs/Desktop/flaskproject21/python-try/Components/instance/carvis.db'
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:////Users\Verty\Documents\python try\Components\instance\carvis.db' #Mickey Test
-#app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///carvis.db'
+#app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:////Users\Verty\Documents\python try\Components\instance\carvis.db' #Mickey Test
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///carvis.db'
 db = SQLAlchemy(app)
 app.secret_key = 'eb3d197e1633fd5193f89ff8b2887923d12645b647a97893'
 
@@ -255,6 +255,23 @@ def create_account_salesperson():
     print("Salesperson added")
     return redirect(url_for('show_admin_dashboard_form'))
 
+@app.route('/changepassword', methods=['POST'])
+def change_password():
+    if 'username' in session:
+        current_user = User.query.filter_by(username=session["username"]).first()
+        new_password = request.form.get('new_password')
+        confirm_password = request.form.get('confirm_password')
+
+        if new_password == confirm_password:
+            if check_password_hash(current_user.password, new_password):
+                return render_template('changePassword.html', error="Please enter a new Password")
+            else:
+                hashed_password = generate_password_hash(new_password)
+                current_user.password = hashed_password
+                db.session.commit()
+                return redirect(url_for('homepage'))
+        else:
+            return render_template('changePassword.html', error="Passwords dont match")
 
 @app.route('/homepage', methods=['GET', 'POST'])
 def homepage():
