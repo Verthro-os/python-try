@@ -3,27 +3,29 @@
   font-family: "Basier circle", -apple-system, system-ui;
   margin: 0;
   padding: 0;
-  box-sizing: border-box;
+  box-sizing: border-box; 
 }
 
 body {
   width: 100%;
   min-height: auto;
-  font-size: 10px;
+  
   padding: 0px auto;
   overflow-y: auto;
 
 }
 
+
 input[type="email"],
 input[type="text"],
-input[type="password"] {
+input[type="address"] {
   background-color: #fff; /* Set your desired color */
   border: 1px solid #ccc;
   border-radius: 4px;
   padding: 8px;
   margin-bottom: 10px;
-  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
 }
 .input-class {
   background-color: #494040; /* Set your desired color */
@@ -44,8 +46,9 @@ input[type="password"] {
 }
 
 .container {
-  flex: 1;
+  flex: 1 1 auto;
   margin: 0 3%;/* Adjusted margin */
+  min-width: 0;
 }
 
 legend {
@@ -60,6 +63,67 @@ legend {
   margin-left: 30px;
 }
 
+.order-history .table-container {
+  flex: 2;
+  max-height: 500px; /* Adjust the height based on the size of 5 rows */
+  overflow-y: auto;
+  overflow-x: auto;
+}
+
+.order-history table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.order-history th,
+.order-history td {
+  border: 1px solid #ddd;
+  padding: 8px;
+  text-align: left;
+  font-size: medium;
+}
+
+.order-history th {
+  background-color: #f2f2f2;
+}
+
+.table-container {
+  
+  max-height: 500px; /* Adjust the height based on your row height to show 5 rows */
+  overflow-y: auto;
+  margin-bottom: 20px;
+  margin-top: 20px;
+
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+table, th, td {
+  border: 1px solid #ccc;
+}
+
+th, td {
+  padding: 8px;
+  text-align: left;
+}
+
+thead {
+  background-color: #f9f9f9;
+}
+
+tbody tr:nth-child(odd) {
+  background-color: #f2f2f2;
+}
+
+h8 {
+  font-size: 1.5em; /* Adjust if you want the pricing to be even larger */
+  margin-bottom: 0.5em; /* Smaller bottom margin for tighter spacing */
+  font-weight: bold;
+  padding-bottom: 10px;
+}
 .button1 {
   background-color: #fff;
   border: 0 solid #e2e8f0;
@@ -132,7 +196,7 @@ legend {
   border: none;
 }
 
-.form-style input[type="text"] {
+.form-style input[type="text"], .form-style input[type="email"], .form-style input[type="address"]{
   font-family: "Basier circle", -apple-system, system-ui, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
   background: rgba(255, 255, 255, .1);
   font-size: 15px;

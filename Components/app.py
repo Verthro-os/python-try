@@ -62,7 +62,12 @@ class Order(db.Model):
     name = db.Column(db.String(100))  
     email = db.Column(db.String(100))  
     country = db.Column(db.String(50))  
-    order_status = db.Column(db.Integer, default=None)
+    order_status = db.Column(db.Integer, default=1)  # Assuming default is 'pending'
+
+    # Relationships
+    user = db.relationship('User', backref=db.backref('orders', lazy=True))
+    car_model = db.relationship('CarModel', backref=db.backref('orders', lazy=True))
+    advertisement = db.relationship('Advertisement', backref=db.backref('orders', lazy=True))
 
 class SalesHistory(db.Model):
     sale_id = db.Column(db.Integer, primary_key=True)
@@ -412,8 +417,9 @@ def account():
         # If no PersonalInformation exists, return a 404 error
         abort(404)
 
+    orders = Order.query.filter_by(user_id=user.user_id).join(Advertisement, Advertisement.ad_id == Order.ad_id).join(CarModel, CarModel.model_id == Order.model_id).order_by(Order.order_date.desc()).limit(5).all()
     # Render the account page with the current user info
-    return render_template('account.html', user=user, personal_info=personal_info)
+    return render_template('account.html', user=user, personal_info=personal_info, orders=orders)
 
 @app.route('/superadmindashboard')
 def superadmindashboard():
