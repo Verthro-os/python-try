@@ -9,24 +9,40 @@ main {
     height: 90vh;        
 }
 
-.container {
-    text-align: center;
-    background-color: #f4f4f4;
-    padding: 20px;
-    width: 300px;
-    box-shadow: 0 0 10px rgba(0,0,0,0.1);
+
+.flex-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
+.logo-container {
+    text-align: left;
+    margin-right: 20px; /* Adjust as needed for spacing */
+}
+
+.logo-container h1 {
+    font-size: 60px; /* Adjust size as needed */
+    color: #333; /* Dark color for visibility */
+    margin: 0 0 5px 0; /* Tighten space between logo and subtitle */
+}
+
+.logo-container p2 {
+    font-size: 30px; /* Smaller than the logo */
+    color: #666; /* Lighter color for a subtle effect */
+    margin: 0;
+}
 .form-container {
     margin-top: 20px;
 }
 
 h1 {
-    margin: 0;
+    margin: 10px;
+    padding: 10px;
     font-size: 24px;
 }
 
-p {
+p3 {
     color: #666;
     font-size: 14px;
 }

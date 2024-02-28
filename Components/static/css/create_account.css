@@ -4,33 +4,41 @@ main {
     margin: 0;
     padding: 0;
     display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
+    justify-content: center; /* Center the container horizontally */
+    align-items: center; /* Center the container vertically */
+    height: 100vh; /* Take at least the full viewport height */
 }
 
 .container {
-    text-align: center;
+    display: flex; /* Use flexbox for layout */
+    align-items: center; /* Align items vertically */
+    text-align: left; /* Align the text to the left */
     background-color: #f4f4f4;
     padding: 20px;
-    width: 300px;
     box-shadow: 0 0 10px rgba(0,0,0,0.1);
 }
 
+.left-section {
+    flex: 1; /* Takes up half of the container */
+    margin-right: 20px; /* Add some space between the text and the form */
+}
+
 .form-container {
-    margin-top: 20px;
+    flex: 1; /* Takes up the other half of the container */
+    margin-top: 0; /* Adjust the margin as needed */
 }
 
 h1 {
     margin: 0;
-    font-size: 24px;
+    font-size: 60px; /* Make it bigger */
+    font-weight: bold; /* Make it bolder */
+    color: #000000; /* Adjust the color as desired */
 }
 
-p {
-    color: #666;
-    font-size: 14px;
+p2 {
+    color: #303030;
+    font-size: 30px;
 }
-
 h2 {
     font-size: 18px;
     color: #333;
