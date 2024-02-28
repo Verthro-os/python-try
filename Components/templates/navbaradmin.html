@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>CARVIS - Find Your Dream Car</title>
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='css/navbar.css') }}"
+    />
+  </head>
+  <header class="site-header">
+    <div class="wrapper">
+      <div class="header-content">
+        <a href="/admindashboard" class="brand-logo">CARVIS</a>
+        <nav class="site-nav">
+          <ul>
+            <li><a href="/admindashboard">AdminDash</a></li>
+            <li><a href="/logout">Log Out</a></li>
+            <li><a href="/create_account_salesperson">AddSeller</a></li>
+          </ul>
+        </nav>
+      </div>
+    </div>
+  </header>
+  {% block content %} {% endblock %}
+
+  <footer style="background: #191919; z-index: 1; color: #fff; padding-top: 5px; padding-bottom: 5px; left: 0; bottom: 0; width: 100%;">
+    <div class="wrapper">
+        <p>© 2024 CARVIS. All rights reserved.</p>
+        <p><a href="/privacy" style="color: #fff;">Privacy Policy</a> | <a href="/terms" style="color: #fff;">Terms of Service</a></p>
+    </div>
+</footer>
+</body>
+</html>
