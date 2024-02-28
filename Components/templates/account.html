@@ -50,22 +50,26 @@
         <div class="section2">
             <div id="column">
                 <div class="container">
+                     {% if error %}
+                     <div class="error-message">
+                     {{ error }}
+                     </div>
+                     {% endif %}
                     <h1>Merchandising Section</h1><br>
                     <legend>Here you can create a new advertisement for a new car</legend>
-    
+
                     <div class="form-style">
-                        <form>
+                         <form method="POST" action="{{ url_for('add_car_advertisement') }} " enctype="multipart/form-data">
                             <fieldset>
-                                <input type="text" placeholder="Car Name">
-                                <input type="text" placeholder="Car Made">
-                                <input type="text" placeholder="Price">
-                                <input type="text" placeholder="Car Overview">
-                                <input type="text" placeholder="Mileage">
-                                <input type="text" placeholder="Fuel Economy">
-                                <input type="text" placeholder="Year of Produce">
-    
+                                <input type="text" name="car_name" placeholder="Car Name" required>
+                                <input type="text" name="car_made" placeholder="Car Made" required>
+                                <input type="text" name="price" placeholder="Price" required>
+                                <input type="text" name="car_overview" placeholder="Car Overview [Safety, Additional]" required>
+                                <input type="text" name="mileage" placeholder="Mileage" required>
+                                <input type="text" name="fuel_economy" placeholder="Fuel Economy" required>
+                                <input type="text" name="year_of_produce" placeholder="Year of Produce" required>
+                                <input type="file" name="car_images" accept="image/*" multiple required>
                             </fieldset>
-                            <button type="button" class="button1">Attach Images</button>
                             <button type="submit" class="button2">Upload Ad</button>
                         </form>
                     </div>

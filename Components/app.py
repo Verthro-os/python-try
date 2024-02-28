@@ -1,3 +1,5 @@
+import os
+
 from flask import Flask, render_template, request, redirect, url_for, session, flash, jsonify, abort
 from flask_sqlalchemy import SQLAlchemy
 from enum import Enum as PyEnum
@@ -8,6 +10,9 @@ from wtforms import StringField, SubmitField
 from wtforms.validators import DataRequired
 
 app = Flask(__name__)
+
+UPLOAD_FOLDER = 'static/images'
+app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
 #chawin only dont change!!
 #app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:////Users/chs/Desktop/flaskproject21/python-try/Components/instance/carvis.db'
@@ -272,6 +277,65 @@ def change_password():
                 return redirect(url_for('homepage'))
         else:
             return render_template('changePassword.html', error="Passwords dont match")
+
+@app.route('/add_car_advertisement', methods=['POST'])
+def add_car_advertisement():
+    car_name = request.form['car_name']
+    car_made = request.form['car_made']
+    price = request.form['price']
+    car_overview = request.form['car_overview']
+    mileage = request.form['mileage']
+    fuel_economy = request.form['fuel_economy']
+    year_of_produce = request.form['year_of_produce']
+
+
+    if 'car_images' in request.files:
+        images = request.files.getlist('car_images')
+        if len(images) != 3:
+            return redirect(url_for('account'))
+        for image in images:
+            print(image.filename)
+            if image.filename != '':
+                image.save(os.path.join(app.config['UPLOAD_FOLDER'], image.filename))
+
+    split_items = car_overview.split(",")
+    first_string = split_items[0]
+    second_string = split_items[1]
+
+    new_car = CarModel(
+        make=car_made,
+        model=car_name,
+        year=year_of_produce,
+        mileage=mileage,
+        price=price,
+        description=car_overview, #First Safety Features, then additioanl
+        image_url="images/" + images[0].filename,
+        image_url_2="images/" +images[1].filename,
+        image_url_3="images/" +images[2].filename,
+        fuel_type=fuel_economy,
+        safety_features=first_string,
+        additional_details=second_string
+    )
+
+    db.session.add(new_car)
+    db.session.flush()
+    db.session.commit()
+
+    new_ad = Advertisement(
+        model_id=new_car.model_id,
+        ad_title="New Car",
+        ad_description="Test",
+        ad_expiry_date=datetime.strptime("2024-4-5", '%Y-%m-%d').date(),  # Convert to datetime object
+        is_new=0
+    )
+    db.session.add(new_ad)
+    db.session.commit()
+
+
+
+
+    return redirect(url_for('account'))
+
 
 @app.route('/homepage', methods=['GET', 'POST'])
 def homepage():

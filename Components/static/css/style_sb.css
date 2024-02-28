@@ -161,3 +161,22 @@ legend {
 .arror-btn{
   margin-left: auto;
 }
+
+.form-style input[type="file"] {
+  font-family: "Basier circle", -apple-system, system-ui, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+  background-color: #fff;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  padding: 8px;
+  margin-bottom: 10px;
+  width: 100%;
+  outline: none;
+}
+
+.form-style input[type="file"]:hover {
+  background-color: #d2d9dd;
+}
+
+.form-style input[type="file"]:focus {
+  background-color: #d2d9dd;
+}
