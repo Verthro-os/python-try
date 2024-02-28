@@ -15,10 +15,26 @@ body {
 
 }
 
+input[type="email"],
+input[type="text"],
+input[type="password"] {
+  background-color: #fff; /* Set your desired color */
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  padding: 8px;
+  margin-bottom: 10px;
+  width: 100%;
+}
+.input-class {
+  background-color: #494040; /* Set your desired color */
+  /* Other styles */
+}
 /*body base*/
 .section2 {
   margin-bottom: 30px;
 }
+
+
 
 #column {
   display: flex;
@@ -34,6 +50,10 @@ body {
 
 legend {
   margin-bottom: 10px;
+  font-size: 1rem;
+  font-weight: 600;
+  margin-bottom: 20px;
+  color: #0d172a;
 }
 
 .container-sub{
@@ -90,7 +110,7 @@ legend {
   text-decoration: none #0d172a solid;
   text-decoration-thickness: auto;
   transition: all .1s cubic-bezier(.4, 0, .2, 1);
-  box-shadow: 0px 1px 2px rgba(166, 175, 195, 0.25);
+  box-shadow: 0px 1px 2px rgba(19, 19, 18, 0.25);
   user-select: none;
   -webkit-user-select: none;
   touch-action: manipulation;
@@ -115,16 +135,11 @@ legend {
 .form-style input[type="text"] {
   font-family: "Basier circle", -apple-system, system-ui, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
   background: rgba(255, 255, 255, .1);
-  border: none;
-  border-radius: 4px;
   font-size: 15px;
   margin: 0;
   outline: 0;
-  padding: 10px;
   width: 100%;
   box-sizing: border-box;
-  background-color: #e8eeef;
-  color: #8a97a0;
   box-shadow: 0 1px 0 rgba(0, 0, 0, 0.03) inset;
   margin-bottom: 20px;
 }

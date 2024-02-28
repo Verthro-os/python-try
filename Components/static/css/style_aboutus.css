@@ -1,4 +1,4 @@
-/* base */
+/* Base */
 * {
   font-family: "Basier circle", -apple-system, system-ui;
   margin: 0;
@@ -6,54 +6,72 @@
   box-sizing: border-box;
 }
 
-body {
-  width: 100%;
-  min-height: auto;
-  font-size: 10px;
-  padding: 0px auto;
-
-}
-
-/*back button*/
-#section1 {
-  justify-content: center;
-  align-items: center;
-  margin-top: 100px;
-  margin-bottom: 15px;
-  text-align: center;
-  outline: none;
-  border: none;
+/* Back Button - Assuming you have a button or link with class="back" */
+.back {
+  cursor: pointer;
+  display: inline-block;
+  padding: 8px 15px;
+  background-color: #f0f0f0;
+  border: 1px solid #ddd;
+  text-decoration: none;
+  color: #333;
 }
 
 .back:hover {
   color: red;
+  border-color: red;
 }
 
-/*body base*/
+/* Form Sections */
 .section2 {
-  margin-top: 80px;
-  margin-bottom: 110px;
-  
-  
+  padding: 20px;
+  background-color: #f9f9f9;
+  margin: 80px auto;
+  border-radius: 8px;
 }
 
 #column {
   display: flex;
+  flex-wrap: wrap;
   justify-content: space-around;
-  max-width: 1200px;
-  margin: 10px auto;
+  gap: 20px; /* Provides space between flex items */
 }
 
 .container {
-  justify-content: center;
+  display: flex;
+  flex-direction: column;
   align-items: center;
-  margin-bottom: 15px;
-  text-align: center;
-  outline: none;
-  border: none;
+  padding: 20px;
+  background: white;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  max-width: 350px; /* Adjust based on your content */
 }
 
-img{
-  width: 0.02px;
-  height: 0.02px;
+.form-style {
+  width: 100%;
+}
+
+.form-style input[type="text"],
+.form-style input[type="email"],
+.form-style input[type="number"],
+.form-style input[type="file"] {
+  width: 100%;
+  padding: 10px;
+  margin: 10px 0;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+
+.form-style button {
+  padding: 10px 20px;
+  background-color: #0056b3;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.form-style button:hover {
+  background-color: #004494;
 }

@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, redirect, url_for, session, flash, jsonify
+from flask import Flask, render_template, request, redirect, url_for, session, flash, jsonify, abort
 from flask_sqlalchemy import SQLAlchemy
 from enum import Enum as PyEnum
 from werkzeug.security import generate_password_hash, check_password_hash
@@ -62,7 +62,7 @@ class Order(db.Model):
     name = db.Column(db.String(100))  
     email = db.Column(db.String(100))  
     country = db.Column(db.String(50))  
-    
+    order_status = db.Column(db.Integer, default=None)
 
 class SalesHistory(db.Model):
     sale_id = db.Column(db.Integer, primary_key=True)
@@ -289,13 +289,67 @@ def ad_detail(ad_id):
     
 
 
+@app.route('/update_personal_info', methods=['POST'])
+def update_personal_info():
+    
+    username = session.get('username')
+    if not username:
+        flash('Please log in to continue.', 'warning')
+        return redirect(url_for('login'))
+
+    
+    user = User.query.filter_by(username=username).first()
+    if not user:
+        flash('User not found.', 'error')
+        return redirect(url_for('login'))
+
+    
+    personal_info = PersonalInformation.query.filter_by(user_id=user.user_id).first()
+    if not personal_info:
+        flash('No personal information found.', 'error')
+        return redirect(url_for('account'))
+
+    
+    personal_info.full_name = request.form['full_name']
+    personal_info.email = request.form['email']
+    personal_info.address = request.form['address']
+
+ 
+    try:
+        db.session.commit()
+        flash('Your personal information has been updated.', 'success')
+    except Exception as e:
+        db.session.rollback()
+        flash('An error occurred while updating your information.', 'error')
+        app.logger.error(f'Error updating personal info: {e}')
+
+    return redirect(url_for('account'))
+    
+
+
 @app.route('/agentdashboard')
 def agentdashboard():
     return render_template('agentDisplay.html')
 
-@app.route('/account')
+@app.route('/account', methods=['GET'])
 def account():
-    return render_template('account.html')
+    username = session.get('username')
+    if not username:
+        flash('Please log in to view your account.', 'warning')
+        return redirect(url_for('login'))
+
+    user = User.query.filter_by(username=username).first()
+    if not user:
+        flash('User not found.', 'error')
+        return redirect(url_for('login'))
+
+    personal_info = PersonalInformation.query.filter_by(user_id=user.user_id).first()
+    if not personal_info:
+        # If no PersonalInformation exists, return a 404 error
+        abort(404)
+
+    # Render the account page with the current user info
+    return render_template('account.html', user=user, personal_info=personal_info)
 
 @app.route('/superadmindashboard')
 def superadmindashboard():
