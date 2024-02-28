@@ -157,6 +157,8 @@ def login():
         session['username'] = username
         if existing_user.user_level == UserLevels.BUYER_SELLER:
             return redirect(url_for('homepage'))
+        elif existing_user.user_level == UserLevels.SUPERADMIN:
+            return redirect(url_for('show_admin_dashboard_form'))
         else:
             return redirect(url_for('show_dashboard_form'))
     
@@ -189,7 +191,7 @@ def show_admin_dashboard_form():
             for user in users:
                 user_info = PersonalInformation.query.filter_by(user_id=user.user_id).first()
                 if user.user_level.name == "SALESPERSON":
-                    user_list.append({"username" : user.username ,"email" : user_info.email})
+                    user_list.append({"username" : user.username ,"email" : user_info.email, "fullname" : user_info.full_name})
             if len(user_list) > 0:
                 return render_template('admin_dashboard2.html', user_name=current_user.username, users=user_list) #Just testing
             else:
@@ -217,6 +219,50 @@ def delete_user(username):
 
             return show_admin_dashboard_form()
     return render_template("forbidden.html"), 403
+
+
+@app.route('/create_account_salesperson')
+def show_create_account_salesperson():
+    return render_template('create_account_salesperson.html')
+
+
+@app.route('/create_account_salesperson', methods=['GET', 'POST'])
+def create_account_salesperson():
+    full_name = request.form['full_name']
+    username = request.form['username']
+    email = request.form['email']
+    password = request.form['password']
+    confirm_password = request.form['confirm_password']
+    address = request.form['address']
+    phone_number = request.form['phone_number']
+    user_level = request.form.get('user_level', 'Salesperson')
+
+    if password != confirm_password:
+        return render_template('create_account_salesperson.html', error="Passwords do not match.")
+
+    existing_user = User.query.filter_by(username=username).first()
+    if existing_user:
+        return render_template('create_account_salesperson.html', error="Username already exists.")
+
+    hashed_password = generate_password_hash(password)
+    user_level_enum = UserLevels(user_level)
+
+    new_user = User(username=username, password=hashed_password, user_level=user_level_enum)
+    db.session.add(new_user)
+    db.session.flush()  # This assigns an ID to new_user without committing the transaction
+
+    new_personal_info = PersonalInformation(
+        user_id=new_user.user_id,
+        full_name=full_name,
+        email=email,
+        phone_number=phone_number,
+        address=address
+    )
+    db.session.add(new_personal_info)
+    db.session.commit()
+    print("Salesperson added")
+    return redirect(url_for('show_admin_dashboard_form'))
+
 
 @app.route('/homepage', methods=['GET', 'POST'])
 def homepage():

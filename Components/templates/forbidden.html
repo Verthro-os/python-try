@@ -3,8 +3,16 @@
 <head>
     <meta charset="UTF-8">
     <title>Forbidden</title>
+    <style>
+          .center {
+            text-align: center;
+        }
+    </style>
 </head>
 <body>
-<p>Forbidden<p>
+{% extends "navbar.html" %}
+{% block content %}
+<p class="center">Forbidden<p>
 </body>
+{% endblock %}
 </html>
