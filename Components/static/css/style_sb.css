@@ -1,18 +1,15 @@
-/* base */
-* {
-  font-family: "Basier circle", -apple-system, system-ui;
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box; 
-}
+
 
 body {
   width: 100%;
   min-height: auto;
-  
   padding: 0px auto;
   overflow-y: auto;
-
+  font-family: "Basier circle", -apple-system, system-ui;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  
 }
 
 

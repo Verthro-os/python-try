@@ -363,19 +363,19 @@ def update_personal_info():
     
     username = session.get('username')
     if not username:
-        flash('Please log in to continue.', 'warning')
+        
         return redirect(url_for('login'))
 
     
     user = User.query.filter_by(username=username).first()
     if not user:
-        flash('User not found.', 'error')
+        
         return redirect(url_for('login'))
 
     
     personal_info = PersonalInformation.query.filter_by(user_id=user.user_id).first()
     if not personal_info:
-        flash('No personal information found.', 'error')
+        
         return redirect(url_for('account'))
 
     
@@ -386,10 +386,10 @@ def update_personal_info():
  
     try:
         db.session.commit()
-        flash('Your personal information has been updated.', 'success')
+        
     except Exception as e:
         db.session.rollback()
-        flash('An error occurred while updating your information.', 'error')
+        
         app.logger.error(f'Error updating personal info: {e}')
 
     return redirect(url_for('account'))
@@ -404,12 +404,12 @@ def agentdashboard():
 def account():
     username = session.get('username')
     if not username:
-        flash('Please log in to view your account.', 'warning')
+        
         return redirect(url_for('login'))
 
     user = User.query.filter_by(username=username).first()
     if not user:
-        flash('User not found.', 'error')
+        
         return redirect(url_for('login'))
 
     personal_info = PersonalInformation.query.filter_by(user_id=user.user_id).first()
