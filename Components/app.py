@@ -16,8 +16,8 @@ app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
 #chawin only dont change!!
 #app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:////Users/chs/Desktop/flaskproject21/python-try/Components/instance/carvis.db'
-#app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:////Users\Verty\Documents\python try\Components\instance\carvis.db' #Mickey Test
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///carvis.db'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:////Users\Verty\Documents\python try\Components\instance\carvis.db' #Mickey Test
+#app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///carvis.db'
 db = SQLAlchemy(app)
 app.secret_key = 'eb3d197e1633fd5193f89ff8b2887923d12645b647a97893'
 
@@ -346,7 +346,7 @@ def add_car_advertisement():
 def homepage():
     if 'username' in session:
         current_user = User.query.filter_by(username=session["username"]).first()
-        if current_user.user_level == UserLevels.BUYER_SELLER:
+        if current_user.user_level == UserLevels.BUYER_SELLER or current_user.user_level == UserLevels.SALESPERSON:
             ads_with_cars = db.session.query(
                 Advertisement,
                 CarModel.make,
