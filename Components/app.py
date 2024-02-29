@@ -390,7 +390,8 @@ def show_my_advertisements():
         if len(advertisements) == 0:
             no_advertisements = True
     # for ad in advertisements
-    return render_template('show_my_advertisements.html', advertisements=advertisements, no_advertisements = no_advertisements)
+    return render_template('show_my_advertisements.html', advertisements=advertisements,
+                           no_advertisements=no_advertisements)
 
 
 @app.route('/delete_ad/<int:advertisement_id>', methods=['POST'])
@@ -406,6 +407,59 @@ def delete_offer(advertisement_id):
     return redirect(url_for('show_my_advertisements'))
 
 
+@app.route('/show_my_received_offers')
+def show_my_received_offers():
+    if 'username' in session:
+        current_user = User.query.filter_by(username=session["username"]).first()
+        advertisements = Advertisement.query.filter_by(user_id=current_user.user_id).all()
+        current_orders = []
+        print(len(advertisements))
+
+        for ad in advertisements:
+            print(ad.ad_title)
+            active_orders = Order.query.filter_by(ad_id=ad.ad_id).filter_by(order_status=1).all()
+            for order in active_orders:
+                linked_car = CarModel.query.filter_by(model_id=ad.model_id).first()
+                order_name = order.name
+                oder_date = order.order_date
+                oder_price = order.negotiated_price
+                order_title = ad.ad_title
+                order_condition = ad.is_new
+                current_orders.append({"name": order_name, "date": oder_date, "price": linked_car.price, "orderprice" : oder_price,
+                                       "title": order_title, "condition": order_condition, "id" : order.order_id})
+
+    return render_template('show_my_received_offers.html', orders=current_orders)
+
+
+
+@app.route('/reject_offer/<int:offer_id>', methods=['POST'])
+def reject_offer(offer_id):
+    offer = Order.query.filter_by(order_id=offer_id).first();
+
+    offer.order_status=3
+
+    db.session.commit()
+
+    flash("Offer Rejected", "success")
+
+    return redirect(url_for('show_my_received_offers'))
+
+
+
+
+@app.route('/accept_offer/<int:offer_id>', methods=['POST'])
+def accept_offer(offer_id):
+    offer = Order.query.filter_by(order_id=offer_id).first();
+
+    offer.order_status=2
+
+    db.session.commit()
+
+    flash("Offer Accepted", "success")
+
+    return redirect(url_for('show_my_received_offers'))
+
+
 @app.route('/homepage', methods=['GET', 'POST'])
 def homepage():
     if 'username' in session:
@@ -419,7 +473,7 @@ def homepage():
                 CarModel.mileage,
                 CarModel.price,
                 CarModel.image_url
-            ).join(CarModel, Advertisement.model_id == CarModel.model_id).filter(Advertisement.is_hidden==False).all()
+            ).join(CarModel, Advertisement.model_id == CarModel.model_id).filter(Advertisement.is_hidden == False).all()
             return render_template('homepage.html', ads_with_cars=ads_with_cars)
         else:
             return render_template('user_login.html')
@@ -575,7 +629,7 @@ def aboutus():
     return render_template('aboutus.html')
 
 
-#with app.app_context():  #Just on Inital RUN
+# with app.app_context():  #Just on Inital RUN
 
 #    db.create_all()
 
