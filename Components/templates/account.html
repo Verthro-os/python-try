@@ -125,10 +125,22 @@
                                 <input type="text" name="car_made" placeholder="Car Made" required>
                                 <input type="text" name="price" placeholder="Price" required>
                                 <input type="text" name="car_overview" placeholder="Car Overview [Safety, Additional]" required>
-                                <input type="text" name="mileage" placeholder="Mileage" required>
+
+                                {% if user_role == 'BUYER_SELLER' %}
+                                  <input type="text" name="mileage" placeholder="Mileage" required>
+                                {% endif %}
+
+
                                 <input type="text" name="fuel_economy" placeholder="Fuel Economy" required>
-                                <input type="text" name="year_of_produce" placeholder="Year of Produce" required>
+
+                                {% if user_role == 'BUYER_SELLER' %}
+                                   <input type="text" name="year_of_produce" placeholder="Year of Produce" required>
+                                {% endif %}
+
+
                                 <input type="file" name="car_images" accept="image/*" multiple required>
+
+
                             </fieldset>
                             <button type="submit" class="button2">Upload Ad</button>
                         </form>

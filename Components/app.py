@@ -17,8 +17,8 @@ app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
 #chawin only dont change!!
 #app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:////Users/chs/Desktop/flaskproject21/python-try/Components/instance/carvis.db'
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:////Users\Verty\Documents\python try\Components\instance\carvis.db' #Mickey Test
-#app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///carvis.db'
+#app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:////Users\Verty\Documents\python try\Components\instance\carvis.db' #Mickey Test
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///carvis.db'
 db = SQLAlchemy(app)
 app.secret_key = 'eb3d197e1633fd5193f89ff8b2887923d12645b647a97893'
 
@@ -163,7 +163,7 @@ def login():
         elif existing_user.user_level == UserLevels.SUPERADMIN:
             return redirect(url_for('homepage'))
         else:
-            return redirect(url_for('show_dashboard_form'))
+            return redirect(url_for('homepage'))
     
     
     return render_template('user_login.html', error="Username and Password dont match")
@@ -292,9 +292,19 @@ def add_car_advertisement():
     car_made = request.form['car_made']
     price = request.form['price']
     car_overview = request.form['car_overview']
-    mileage = request.form['mileage']
+
+    if 'mileage' in request.form:
+        mileage = request.form['mileage']
+    else:
+        mileage = "0"
+
     fuel_economy = request.form['fuel_economy']
-    year_of_produce = request.form['year_of_produce']
+
+    if 'year_of_produce' in request.form:
+        year_of_produce = request.form['year_of_produce'] #Be
+    else:
+        current_year = datetime.now().year
+        year_of_produce = current_year
 
 
     if 'car_images' in request.files:
@@ -329,12 +339,17 @@ def add_car_advertisement():
     db.session.flush()
     db.session.commit()
 
+    if new_car.mileage == 0 and new_car.year == datetime.now().year:
+        is_new = True
+    else:
+        is_new = False
+
     new_ad = Advertisement(
         model_id=new_car.model_id,
         ad_title="New Car",
         ad_description="Test",
         ad_expiry_date=datetime.strptime("2024-4-5", '%Y-%m-%d').date(),  # Convert to datetime object
-        is_new=0
+        is_new=is_new
     )
     db.session.add(new_ad)
     db.session.commit()
@@ -486,7 +501,7 @@ def account():
 
     orders = Order.query.filter_by(user_id=user.user_id).join(Advertisement, Advertisement.ad_id == Order.ad_id).join(CarModel, CarModel.model_id == Order.model_id).order_by(Order.order_date.desc()).limit(5).all()
     # Render the account page with the current user info
-    return render_template('account.html', user=user, personal_info=personal_info, orders=orders)
+    return render_template('account.html', user=user, personal_info=personal_info, orders=orders, user_role=user.user_level.name)
 
 @app.route('/superadmindashboard')
 def superadmindashboard():
