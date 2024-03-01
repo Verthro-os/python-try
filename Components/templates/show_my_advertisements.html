@@ -128,7 +128,7 @@
             <tbody>
                 {% for ad in advertisements %}
                 <tr>
-                    <td>{{ ad.title }}</td>
+                    <td><a href="/ad/{{ad.id}}">{{ ad.title }}</a></td>
                     <td>{{ 'New' if ad.condition == 1 else 'Used' }}</td>
                     <td>{{ ad.expire }}</td>
                     <td class="button-container">
