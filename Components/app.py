@@ -168,7 +168,7 @@ def login():
         if existing_user.user_level == UserLevels.BUYER_SELLER:
             return redirect(url_for('homepage'))
         elif existing_user.user_level == UserLevels.SUPERADMIN:
-            return redirect(url_for('homepage'))
+            return redirect(url_for('show_admin_dashboard_form'))
         else:
             return redirect(url_for('account'))
 
@@ -224,11 +224,24 @@ def delete_user(username):
             print("USERID -> " + str(del_user.user_id))
 
             PersonalInformation.query.filter_by(user_id=del_user.user_id).delete()
-            Advertisement.query.filter_by(model_id=del_user.user_id).delete()
+            #Advertisement.query.filter_by(model_id=del_user.user_id).delete()
             Salesperson.query.filter_by(salesperson_id=del_user.user_id).delete()
+
+            entries = Advertisement.query.filter_by(user_id=del_user.user_id).all()
+
+            for entry in entries:
+                if not entry.is_hidden:
+                    entry.is_hidden = True
+                    db.session.commit()
+                    active_orders = Order.query.filter_by(ad_id=entry.ad_id).filter_by(order_status=1).all()
+                    for order in active_orders:
+                        order.order_status = 3
+                        db.session.commit()
+
 
             db.session.delete(del_user)
             db.session.commit()
+
 
             return show_admin_dashboard_form()
     return render_template("forbidden.html"), 403

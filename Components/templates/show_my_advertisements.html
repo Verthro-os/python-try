@@ -132,9 +132,7 @@
                     <td>{{ 'New' if ad.condition == 1 else 'Used' }}</td>
                     <td>{{ ad.expire }}</td>
                     <td class="button-container">
-
-
-
+                        
                     <form method="post" action="/delete_ad/{{ ad.id }}" style="display: inline;">
                     <button type="submit" name="action" value="delete">Delete</button>
                     </td>
