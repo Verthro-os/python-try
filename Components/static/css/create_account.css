@@ -39,6 +39,7 @@ p2 {
     color: #303030;
     font-size: 30px;
 }
+
 h2 {
     font-size: 18px;
     color: #333;
@@ -93,3 +94,7 @@ button:hover {
 .error-message {
     color: red;
 }
+
+.centered {
+         text-align: center;
+    }
